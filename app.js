@@ -597,7 +597,7 @@ function pageBook(q) {
           <label class="field"><span>Mobile phone</span><input id="bk-phone" name="phone" type="tel" autocomplete="tel" value="${esc(c ? c.phone : '')}" placeholder="(555) 555-0100"></label>
           <label class="field field-wide"><span>Anything your stylist should know? (optional)</span><textarea id="bk-notes" name="notes" rows="3" placeholder="Hair goals, allergies, inspiration photos to bring..."></textarea></label>
         </div>
-        <label class="check"><input type="checkbox" name="agree" id="bk-agree" required> <span>I agree to the <a class="link" href="#/policies" target="_blank">cancellation policy</a>: cancel or change at least ${state.settings.cancelWindowHours} hours ahead, or a ${state.settings.lateFeePct}% fee may apply.</span></label>
+        <label class="check"><input type="checkbox" name="agree" id="bk-agree" required aria-label="I agree to the cancellation policy"> <span>I agree to the <a class="link" href="#/policies" target="_blank">cancellation policy</a>: cancel or change at least ${state.settings.cancelWindowHours} hours ahead, or a ${state.settings.lateFeePct}% fee may apply.</span></label>
         <p class="muted small">Demo site: please use made-up details, not real personal information.</p>
         <button type="submit" class="btn btn-primary btn-lg">Confirm booking</button>
       </form>`;
@@ -833,12 +833,13 @@ function staffDashboard() {
   const attn = [];
   late.forEach(b => attn.push(`<li><span class="tag warn">Running late</span> ${esc(clById(b.clientId).name)} is about ${b.lateNotice.minutes} min late for ${fmtTime(parseDT(b.start))}. <a class="link" href="#/staff/booking/${b.id}">Open</a></li>`));
   fees.forEach(b => attn.push(`<li><span class="tag warn">Late cancel</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. Fee ${money(b.fee.amount)} pending. <button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="waived">Waive</button><button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="charged">Charge</button></li>`));
-  unconfirmed.forEach(b => attn.push(`<li><span class="tag">Unconfirmed</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. <button type="button" class="btn btn-ghost btn-small" data-action="set-status" data-id="${b.id}" data-status="confirmed">Mark confirmed</button></li>`));
+  unconfirmed.slice(0, 5).forEach(b => attn.push(`<li><span class="tag">Unconfirmed</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. <button type="button" class="btn btn-ghost btn-small" data-action="set-status" data-id="${b.id}" data-status="confirmed">Mark confirmed</button></li>`));
+  if (unconfirmed.length > 5) attn.push(`<li><a class="link" href="#/staff/bookings${qs({ status: 'booked' })}">See all ${unconfirmed.length} unconfirmed bookings</a></li>`);
   if (wl.length) attn.push(`<li><span class="tag">Waitlist</span> ${wl.length} client${wl.length > 1 ? 's' : ''} waiting for a spot. <a class="link" href="#/staff/waitlist">See waitlist</a></li>`);
   return `<div class="page-head row"><div><h1>Today</h1><p class="muted">${fmtLong(today0())}</p></div><a class="btn btn-secondary" href="#/staff/calendar">Open calendar</a></div>
     <div class="stats">
       <div class="stat"><span class="stat-n">${todays.length}</span><span class="stat-l">Appointments today</span></div>
-      <div class="stat"><span class="stat-n">${money(revenue)}</span><span class="stat-l">Booked revenue today</span></div>
+      <div class="stat"><span class="stat-n">$${revenue.toLocaleString('en-US')}</span><span class="stat-l">Booked revenue today</span></div>
       <div class="stat"><span class="stat-n">${unconfirmed.length}</span><span class="stat-l">Unconfirmed, next 48 hrs</span></div>
       <div class="stat"><span class="stat-n">${cancels}</span><span class="stat-l">Cancellations, last 7 days</span></div>
     </div>
@@ -876,7 +877,9 @@ function staffCalendar(q) {
     return `<div class="cal-col"><div class="cal-colhead">${stDot(st)} ${esc(st.name)}</div><div class="cal-colbody" style="height:${rows * rowH}px">${shade}${cells}${blocks}${evs}</div></div>`;
   }).join('');
   const prev = dKey(addDays(d, -1)), next = dKey(addDays(d, 1));
-  return `<div class="page-head row"><div><h1>Calendar</h1><p class="muted">${fmtLong(d)}${sh ? '' : ' · Salon closed'}</p></div>
+  let nextOpen = '';
+  if (!sh) { let n = addDays(d, 1); for (let i = 0; i < 7 && !SALON.hours[n.getDay()]; i++) n = addDays(n, 1); nextOpen = dKey(n); }
+  return `<div class="page-head row"><div><h1>Calendar</h1><p class="muted">${fmtLong(d)}${sh ? '' : ` · Salon closed · <a class="link" href="#/staff/calendar${qs({ date: nextOpen })}">Jump to ${fmtDay(parseDT(nextOpen))}</a>`}</p></div>
     <div class="cal-nav"><a class="btn btn-ghost btn-small" href="#/staff/calendar${qs({ date: prev })}">← Previous day</a>
       <a class="btn btn-ghost btn-small" href="#/staff/calendar">Today</a>
       <a class="btn btn-ghost btn-small" href="#/staff/calendar${qs({ date: next })}">Next day →</a>
@@ -1026,7 +1029,7 @@ function staffAvailability() {
       <label class="field"><span>Date</span><input type="date" name="date" value="${dKey(addDays(today0(), 1))}" min="${tk}" required></label>
       <label class="field"><span>From</span><input type="time" name="start" value="12:00" step="900"></label>
       <label class="field"><span>To</span><input type="time" name="end" value="13:00" step="900"></label>
-      <label class="check"><input type="checkbox" name="allDay"> <span>All day</span></label>
+      <label class="check"><input type="checkbox" name="allDay" aria-label="Block the whole day"> <span>All day</span></label>
       <label class="field grow"><span>Reason</span><input name="reason" placeholder="Lunch, appointment, training..." value="Personal time"></label>
       <button type="submit" class="btn btn-primary">Block time</button></form>
       ${blocks.length ? `<table class="table"><thead><tr><th>Stylist</th><th>Date</th><th>Time</th><th>Reason</th><th></th></tr></thead><tbody>${blocks.map(k => `<tr><td>${esc(stById(k.stylistId).name)}</td><td>${fmtDay(parseDT(k.date))}</td><td class="nowrap">${fmtT(k.start)} to ${fmtT(k.end)}</td><td>${esc(k.reason)}</td><td class="right"><button type="button" class="btn btn-ghost btn-small" data-action="block-remove" data-id="${k.id}">Remove</button></td></tr>`).join('')}</tbody></table>` : emptyState('No upcoming time off.')}
