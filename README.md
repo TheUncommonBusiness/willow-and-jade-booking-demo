@@ -4,6 +4,8 @@ A fake salon booking system for The Uncommon Business customer service class dem
 
 **This is a class demo.** No real appointments, payments or personal data. Every page carries a demo banner, and search engines are told not to list it.
 
+**What matches the real salon:** the service menu (all 65 services, names, categories and starting prices) and the staff names and tiers, taken from Willow & Jade's public online booking page on 2026-11-23. **What's made up:** service lengths, working hours, schedules, clients, policies, address and phone. Velora replaces their real booking software in this demo and copies none of its branding.
+
 ## Demo logins
 
 | Role | Email | Password |

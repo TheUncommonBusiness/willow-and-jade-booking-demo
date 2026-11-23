@@ -7,7 +7,7 @@
 'use strict';
 
 /* ---------------- constants ---------------- */
-const STORE_KEY = 'velora-wj-demo-v1';
+const STORE_KEY = 'velora-wj-demo-v2';
 const SESSION_KEY = 'velora-wj-session-v1';
 const GUEST_KEY = 'velora-wj-guest-v1';
 const RESEED_AFTER_DAYS = 14;
@@ -30,37 +30,103 @@ const SALON = {
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const WEEK_ORDER = [2, 3, 4, 5, 6, 0, 1];
 
+/* Service menu and staff mirror Willow & Jade's public online booking menu (names, categories, starting prices,
+   staff names and tiers). Lengths, hours and schedules are demo estimates. */
+const EXT_TAPE = ['alanna', 'stephanie', 'nikki-v', 'cristina', 'kelley'];
+const EXT_ALL = ['nikki-v', 'kelley', 'alanna', 'stephanie', 'cristina'];
+const CAT = {
+  nc: '❋ New Clients Click Here (Color or Extension Clients) ❋', color: 'Haircoloring', blow: 'Blowouts, Styling, & Makeup', cut: 'Haircut',
+  curly: 'Naturally Curly Hair Packages & Services', perm: 'Perms & Keratins', secret: 'Secret Menu', ext: 'Extensions', consult: 'Consultations',
+};
+const COLOR_NOTE = 'Starting price. Color is weighed, so the final price depends on how much is used and your stylist tier.';
+const S = (id, cat, name, price, from, dur, desc = '', only = null) => ({ id, cat, name, price, from, dur, desc, only });
 const SERVICES = [
-  { id: 'cut-style', cat: 'Cuts & styling', name: "Women's cut & style", dur: 75, price: 85, desc: 'Consultation, wash, precision cut and blow-dry finish.' },
-  { id: 'mens-cut', cat: 'Cuts & styling', name: "Men's cut", dur: 45, price: 45, desc: 'Clipper or scissor cut with wash and style.' },
-  { id: 'kids-cut', cat: 'Cuts & styling', name: 'Kids cut (12 and under)', dur: 30, price: 30, desc: 'A quick, gentle cut for little clients.' },
-  { id: 'blowout', cat: 'Cuts & styling', name: 'Blowout', dur: 45, price: 55, desc: 'Wash and a smooth or full-volume blow-dry.' },
-  { id: 'root-touchup', cat: 'Color', name: 'Root touch-up', dur: 90, price: 110, desc: 'Single-process color at the roots, up to 6 weeks of growth.' },
-  { id: 'all-over', cat: 'Color', name: 'All-over color', dur: 120, price: 150, desc: 'Single-process color from roots to ends.' },
-  { id: 'balayage', cat: 'Color', name: 'Balayage', dur: 180, price: 260, desc: 'Hand-painted highlights with toner and style.' },
-  { id: 'gloss', cat: 'Color', name: 'Gloss & tone', dur: 45, price: 60, desc: 'Shine and tone refresh between color visits.' },
-  { id: 'deep-cond', cat: 'Treatments', name: 'Deep conditioning', dur: 30, price: 35, desc: 'Moisture mask with a scalp massage.' },
-  { id: 'keratin', cat: 'Treatments', name: 'Keratin smoothing', dur: 150, price: 300, desc: 'Frizz-control treatment that lasts up to 12 weeks.' },
-  { id: 'consult', cat: 'Consultations', name: 'Free color consultation', dur: 15, price: 0, desc: 'Talk through goals, timing and price before a color service.' },
-  { id: 'bridal-trial', cat: 'Consultations', name: 'Bridal trial', dur: 90, price: 150, desc: 'A practice run of your wedding-day style.' },
+  S('color-consultation', CAT.nc, 'Color Consultation', 25, true, 30, 'For new color clients. Includes a patch or strand test if needed, a plan and a quote.'),
+  S('extensions-consultation', CAT.nc, 'Extensions Consultation', 25, false, 30, 'Required for new extension clients. Beaded hand-tied wefts and tape-ins.', EXT_ALL),
+  S('glaze', CAT.color, 'Glaze (No Haircut and/or Blowout)', 60, true, 60, 'Shine and tone refresh on its own. ' + COLOR_NOTE),
+  S('root-touch-up', CAT.color, 'Single Process Color Root Touch Up (No Haircut and/or Blowout)', 70, true, 75, COLOR_NOTE),
+  S('face-frame-highlight', CAT.color, 'Face Frame Highlight', 156, true, 120, COLOR_NOTE),
+  S('full-foil-highlight', CAT.color, 'Full Foil Highlight', 221, true, 180, COLOR_NOTE),
+  S('lived-in-face-frame', CAT.color, 'Lived-in Face Frame Highlight', 203, true, 150, COLOR_NOTE),
+  S('lived-in-full', CAT.color, 'Lived-in Full Highlight', 286, true, 210, COLOR_NOTE),
+  S('lived-in-partial', CAT.color, 'Lived-in Partial Highlight', 261, true, 180, COLOR_NOTE),
+  S('glaze-cut', CAT.color, 'Glaze with Haircut and/or Blowout', 82, true, 105, COLOR_NOTE),
+  S('lived-in-partial-nape', CAT.color, 'Lived-in Partial Highlight with Lightness at the Nape', 266, true, 195, COLOR_NOTE),
+  S('partial-highlight', CAT.color, 'Partial Highlight', 231, true, 165, COLOR_NOTE),
+  S('partial-foils-nape', CAT.color, 'Partial w/ Foils at the Nape', 211, true, 150, COLOR_NOTE),
+  S('t-zone', CAT.color, 'Single Process "T-Zone" Hairline Touch-Up', 56, true, 45, COLOR_NOTE),
+  S('single-process-glaze', CAT.color, 'Single Process Color with Glaze', 128, true, 120, COLOR_NOTE),
+  S('root-touch-up-cut', CAT.color, 'Single Process Root Touch Up with Haircut or Blowout', 125, true, 120, COLOR_NOTE),
+  S('basic-blowout', CAT.blow, 'Basic Blowout', 45, true, 45, 'Wash and blow-dry.'),
+  S('brush-set-blowout', CAT.blow, 'Brush Set Blowout', 55, true, 60, 'Blowout set on brushes for lasting volume.'),
+  S('evening-style', CAT.blow, 'Evening Style', 100, true, 60, 'Polished style for an event.'),
+  S('extended-blowout', CAT.blow, 'Extended Blowout | Thick or Long Hair', 55, true, 60, 'Blowout with extra time for thick or long hair.'),
+  S('extension-blowout', CAT.blow, 'Extension Blowout', 55, true, 60, 'Blowout for clients wearing extensions.'),
+  S('eye-makeup', CAT.blow, 'Eye Makeup Only', 50, true, 30, 'Eye makeup application.'),
+  S('full-makeup', CAT.blow, 'Full Makeup Application', 135, true, 75, 'Full face makeup application.'),
+  S('nuface', CAT.blow, 'Nuface treatment', 25, false, 15, 'Microcurrent facial add-on.'),
+  S('updo', CAT.blow, 'Updo', 95, true, 75, 'Pinned-up style for an event.'),
+  S('velcro-roller-set', CAT.blow, 'Velcro Roller Set Blowout', 60, true, 60, 'Blowout set in Velcro rollers for body.'),
+  S('bang-trim', CAT.cut, 'Bang Trim', 15, true, 15, 'Quick fringe tidy between cuts.'),
+  S('barber-cut', CAT.cut, 'Barber Cut/Clipper Cut', 40, true, 30, 'Clipper or barber-style cut.'),
+  S('calligraphy-barber', CAT.cut, 'Calligraphy Barber Cut', 60, false, 45, 'Barber cut using the calligraphy cutting tool.'),
+  S('calligraphy-cut-blowout', CAT.cut, 'Calligraphy Cut with Blowout', 100, true, 75, 'Calligraphy cut finished with a blowout.'),
+  S('clean-up-undercut', CAT.cut, 'Clean Up or Undercut', 25, true, 15, 'Neckline, sides or undercut tidy.'),
+  S('extended-calligraphy', CAT.cut, 'Extended Calligraphy Cut and Blowout | Thick or Long Hair', 125, true, 90, 'Calligraphy cut and blowout with extra time.'),
+  S('extended-haircut-blowout', CAT.cut, 'Extended Haircut and Blowout | Thick/Long Hair OR Transformation Cut', 80, true, 90, 'For thick or long hair, or a big change.'),
+  S('haircut-blowout', CAT.cut, 'Haircut & Blowout', 70, true, 60, 'Cut, wash and blowout.'),
+  S('pixie-cut', CAT.cut, 'Pixie Cut', 80, true, 45, 'Short cut and style.'),
+  S('razor-haircut', CAT.cut, 'Razor Haircut & Style', 85, true, 60, 'Razor-cut texture with style.'),
+  S('shag-haircut', CAT.cut, 'Shag Haircut', 90, true, 75, 'Layered shag cut and style.'),
+  S('shag-extra-long', CAT.cut, 'Shag Haircut - Extra Long Shag', 100, true, 90, 'Shag cut for extra-long hair.'),
+  S('youth-barber', CAT.cut, 'Youth Barber Cut (under 10)', 35, true, 30, 'Barber cut for kids under 10.'),
+  S('youth-haircut', CAT.cut, 'Youth Haircut & Blowdry  (under 10)', 35, true, 30, 'Cut and blow-dry for kids under 10.'),
+  S('scalp-massage-add', CAT.cut, 'Scalp Massage + Haircut and/or Blowout', 42, true, 30, 'Add a scalp massage to a cut or blowout.'),
+  S('the-revival', CAT.cut, 'The Revival ❋ A Treatment Haircut', 70, true, 90, 'Haircut paired with a treatment.'),
+  S('curly-maintenance', CAT.curly, 'Curly Hair Maintenance Cut', 90, true, 75, 'Maintenance cut for natural curls.'),
+  S('curly-lesson', CAT.curly, 'Curly Hair Styling Lesson', 100, false, 60, 'Learn to style your curls at home.'),
+  S('curly-lesson-xl', CAT.curly, 'Curly Hair Styling Lesson | Extra long/extra thick hair', 150, false, 90, 'Styling lesson with extra time.'),
+  S('curly-first-time', CAT.curly, 'First Time Curly Haircut Package', 175, false, 120, 'First curly cut, styling and education.'),
+  S('curly-first-time-xl', CAT.curly, 'First Time Curly Haircut Package - Extra long/thick hair', 225, false, 150, 'First curly package with extra time.'),
+  S('full-keratin', CAT.perm, 'Full Keratin Treatment', 325, true, 180, 'Smoothing treatment to cut frizz.'),
+  S('keratin-express', CAT.perm, 'Keratin Express Blowout', 200, true, 120, 'Shorter smoothing treatment.'),
+  S('perm', CAT.perm, 'Perm', 240, true, 150, 'Permanent wave.'),
+  S('perm-consultation', CAT.perm, 'Perm Consultation', 25, false, 15, 'Plan your perm before booking it.'),
+  S('glitter-10', CAT.secret, '10 Goddess Glitter Glitterlite Strands', 30, true, 15, 'Ten strands of hair tinsel.'),
+  S('scalp-massage-15', CAT.secret, '15 Minute Scalp Massage', 20, true, 15, 'Fifteen-minute scalp massage.'),
+  S('scalp-massage-5', CAT.secret, '5 Minute Scalp Massage', 10, false, 15, 'Quick scalp massage add-on.'),
+  S('glitter-6', CAT.secret, '6 Goddess Glitter Glitterlite Strands', 20, true, 15, 'Six strands of hair tinsel.'),
+  S('cleanse-condition', CAT.secret, 'Cleanse & Condition', 10, true, 15, 'Wash and conditioning add-on.'),
+  S('eyebrow-tint', CAT.secret, 'Dramedy Eyebrow Tint', 25, false, 15, 'Brow tint.'),
+  S('makeup-lesson', CAT.secret, 'One on One Makeup Lesson', 225, false, 90, 'Private makeup lesson.'),
+  S('scalp-treatment-blowout', CAT.secret, 'Scalp Treatment, 15 min Scalp Massage, + Blowout', 95, true, 75, 'Scalp treatment, massage and blowout.'),
+  S('scalp-treatment-lots', CAT.secret, 'Scalp Treatment, 15 min Scalp Massage, + Blowout - Lots of hair', 110, true, 90, 'For lots of hair.'),
+  S('scalp-treatment-cut-lots', CAT.secret, 'Scalp Treatment, 15 min Scalp Massage, + Blowout - W/cut & blowout (lots of hair)', 150, true, 120, 'With a haircut, for lots of hair.'),
+  S('scalp-treatment-cut', CAT.secret, 'Scalp Treatment, 15 min Scalp Massage, + Blowout - With haircut and blowout', 115, true, 105, 'With a haircut and blowout.'),
+  S('cbd-scalp', CAT.secret, 'Soothing CBD Scalp Concentrate', 35, false, 15, 'Soothing scalp add-on.'),
+  S('tape-in-removal', CAT.ext, 'Tape-In Extension Removal', 125, true, 60, 'Removal of tape-in extensions.', EXT_TAPE),
+  S('product-consultation', CAT.consult, 'Product Consultation', 25, false, 15, 'Find the right products for your hair.'),
 ];
 
+const H = (a, b) => [a, b];
 const STYLISTS = [
-  { id: 'avery', name: 'Avery Lin', title: 'Owner and master stylist', color: '#2f6f5e', services: 'all',
-    hours: { 2: ['09:00', '17:00'], 3: ['09:00', '17:00'], 4: ['11:00', '19:00'], 5: ['09:00', '17:00'], 6: ['08:00', '14:00'] } },
-  { id: 'marisol', name: 'Marisol Reyes', title: 'Color specialist', color: '#8a5a83',
-    services: ['cut-style', 'root-touchup', 'all-over', 'balayage', 'gloss', 'deep-cond', 'keratin', 'consult'],
-    hours: { 2: ['10:00', '18:00'], 3: ['10:00', '18:00'], 4: ['10:00', '18:00'], 6: ['08:00', '16:00'] } },
-  { id: 'jordan', name: 'Jordan Pike', title: 'Stylist', color: '#b8743a',
-    services: ['cut-style', 'mens-cut', 'kids-cut', 'blowout', 'gloss', 'deep-cond', 'bridal-trial', 'consult'],
-    hours: { 3: ['11:00', '19:00'], 4: ['11:00', '19:00'], 5: ['11:00', '19:00'], 6: ['08:00', '16:00'] } },
-  { id: 'tess', name: 'Tess Okafor', title: 'Junior stylist', color: '#4a6fa5',
-    services: ['mens-cut', 'kids-cut', 'blowout', 'deep-cond', 'consult'],
-    hours: { 2: ['09:00', '15:00'], 4: ['13:00', '19:00'], 5: ['09:00', '17:00'], 6: ['08:00', '16:00'] } },
+  { id: 'emma-s', name: 'Emma S', title: 'Rising Stylist', color: '#7a9e7e', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('11:00', '19:00'), 5: H('09:00', '17:00'), 6: H('08:00', '14:00') } },
+  { id: 'alanna', name: 'Alanna', title: 'Willow Stylist', color: '#2f6f5e', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('10:00', '18:00'), 4: H('10:00', '18:00'), 6: H('08:00', '16:00') } },
+  { id: 'julez', name: 'Julez', title: 'Jade Stylist', color: '#8a5a83', services: 'all', hours: { 3: H('11:00', '19:00'), 4: H('11:00', '19:00'), 5: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
+  { id: 'nicolette', name: 'Nicolette', title: 'Willow Stylist', color: '#b8743a', services: 'all', hours: { 2: H('09:00', '17:00'), 4: H('09:00', '17:00'), 5: H('09:00', '17:00'), 6: H('08:00', '14:00') } },
+  { id: 'kelley', name: 'Kelley', title: 'Sage Stylist', color: '#4a6fa5', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('09:00', '17:00'), 4: H('11:00', '19:00'), 5: H('09:00', '17:00') } },
+  { id: 'nikki-v', name: 'Nikki V', title: 'Jade Stylist', color: '#a0525c', services: 'all', hours: { 2: H('10:00', '16:00'), 3: H('10:00', '16:00'), 4: H('10:00', '16:00') } },
+  { id: 'cristina', name: 'Cristina', title: 'Willow Stylist', color: '#5b7f95', services: 'all', hours: { 3: H('09:00', '17:00'), 4: H('11:00', '19:00'), 5: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
+  { id: 'nikki-g', name: 'Nikki G', title: 'Sage Stylist', color: '#6d6a3a', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('09:00', '17:00'), 5: H('09:00', '17:00'), 6: H('08:00', '16:00') } },
+  { id: 'sam-h', name: 'Sam H', title: 'Willow Stylist', color: '#9a6b3f', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('09:00', '17:00'), 5: H('11:00', '19:00'), 6: H('08:00', '14:00') } },
+  { id: 'stephanie', name: 'Stephanie', title: 'Jade Stylist', color: '#3f7d74', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('10:00', '18:00'), 5: H('10:00', '18:00'), 6: H('08:00', '16:00') } },
+  { id: 'sam-d', name: 'Sam D', title: 'Willow Stylist', color: '#7b5ea7', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
 ];
+const HOSPITALITY = [{ name: 'Anna', title: 'Guest Hospitality' }, { name: 'Sarah', title: 'Guest Hospitality' }];
+const priceLabel = s => (s.from ? 'from ' : '') + money(s.price);
 
 const CLIENT_NAMES = ['Maya Thompson', 'Priya Shah', 'Noah Bennett', 'Chloe Nguyen', 'Ethan Wallace', 'Zoe Patel', 'Lucas Moreno',
-  'Isabel Ortiz', 'Ben Harper', 'Nora Quinn', 'Leo Walsh', 'Ruby Chen', 'Max Ivanov', 'Ella Fischer', 'Sam Ortega', 'Iris Novak',
+  'Isabel Ortiz', 'Ben Harper', 'Nora Quinn', 'Leo Walsh', 'Ruby Chen', 'Max Ivanov', 'Ella Fischer', 'Sean Ortega', 'Iris Novak',
   'Theo Grant', 'Mila Duarte', 'Jack Rowan', 'Hazel Brooks'];
 
 const STATUS = { booked: 'Booked', confirmed: 'Confirmed', 'checked-in': 'Checked in', completed: 'Completed', cancelled: 'Cancelled', 'no-show': 'No-show' };
@@ -118,7 +184,12 @@ const svcById = id => SERVICES.find(s => s.id === id);
 const stById = id => state.stylists.find(s => s.id === id);
 const clById = id => state.clients.find(c => c.id === id);
 const bkById = id => state.bookings.find(b => b.id === id);
-const canDo = (st, sid) => !!st && (st.services === 'all' || st.services.includes(sid));
+const canDo = (st, sid) => {
+  if (!st) return false;
+  const svc = svcById(sid);
+  if (svc && svc.only && !svc.only.includes(st.id)) return false;
+  return st.services === 'all' || st.services.includes(sid);
+};
 const depositFor = svc => (svc && svc.price >= state.settings.depositMin ? Math.round(svc.price * state.settings.depositPct / 100) : 0);
 
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: demo still runs */ } }
@@ -203,7 +274,7 @@ function seed() {
     s.clients.push({ id: 'c' + (i + 1), name: n, email: i === 0 ? 'maya@example.com' : `${f}.${l}@example.com`,
       phone: `(555) 555-01${pad(10 + i)}`, notes: '', createdAt: dKey(addDays(t0, -240 + i * 9)) });
   });
-  s.clients[0].notes = 'Prefers Avery. Sensitive scalp, patch test on file. Likes a morning slot.';
+  s.clients[0].notes = 'Prefers Kelley. Sensitive scalp, patch test on file. Likes a morning slot.';
   s.clients[3].notes = 'Often runs 10 minutes late. Send a reminder the morning of.';
   s.clients[7].notes = 'Bridal party in spring. Ask about a group booking.';
   s.clients[11].notes = 'Allergic to fragrance. Use the fragrance-free line.';
@@ -229,20 +300,20 @@ function seed() {
   const iso = d => new Date(d.getTime() + 9 * 36e5).toISOString();
 
   // Time off first, so generated bookings avoid it.
-  const mar = stById('marisol'), avery = stById('avery');
-  const marOff = nextWorkDay(mar, addDays(t0, 6));
-  const marWin = windowFor(mar, dKey(marOff));
-  s.blocks.push({ id: uid('k'), stylistId: 'marisol', date: dKey(marOff), start: m2hm(marWin[0]), end: m2hm(marWin[1]), reason: 'Vacation day' });
-  const avClass = nextWorkDay(avery, addDays(t0, 3));
-  s.blocks.push({ id: uid('k'), stylistId: 'avery', date: dKey(avClass), start: '13:00', end: '15:00', reason: 'Color education class' });
+  const ng = stById('nikki-g'), kel = stById('kelley');
+  const ngOff = nextWorkDay(ng, addDays(t0, 6));
+  const ngWin = windowFor(ng, dKey(ngOff));
+  s.blocks.push({ id: uid('k'), stylistId: 'nikki-g', date: dKey(ngOff), start: m2hm(ngWin[0]), end: m2hm(ngWin[1]), reason: 'Vacation day' });
+  const kelClass = nextWorkDay(kel, addDays(t0, 3));
+  s.blocks.push({ id: uid('k'), stylistId: 'kelley', date: dKey(kelClass), start: '13:00', end: '15:00', reason: 'Color education class' });
 
   // Maya's fixed history and upcoming visits (the demo client login).
   const fixed = [
-    { days: -63, st: 'avery', svc: 'balayage', time: '10:00', status: 'completed', dir: -1 },
-    { days: -35, st: 'avery', svc: 'cut-style', time: '09:00', status: 'completed', dir: -1 },
-    { days: -14, st: 'marisol', svc: 'gloss', time: '11:00', status: 'completed', dir: -1 },
-    { days: 1, st: 'avery', svc: 'cut-style', time: '10:00', status: 'confirmed', dir: 1 },
-    { days: 9, st: 'marisol', svc: 'root-touchup', time: '10:30', status: 'booked', dir: 1 },
+    { days: -63, st: 'kelley', svc: 'lived-in-full', time: '09:00', status: 'completed', dir: -1 },
+    { days: -35, st: 'kelley', svc: 'haircut-blowout', time: '09:00', status: 'completed', dir: -1 },
+    { days: -14, st: 'julez', svc: 'glaze-cut', time: '11:00', status: 'completed', dir: -1 },
+    { days: 1, st: 'kelley', svc: 'haircut-blowout', time: '10:00', status: 'confirmed', dir: 1 },
+    { days: 9, st: 'kelley', svc: 'root-touch-up-cut', time: '10:30', status: 'booked', dir: 1 },
   ];
   for (const f of fixed) {
     const st = stById(f.st);
@@ -254,7 +325,10 @@ function seed() {
   }
 
   // Busy, realistic schedule: 3 weeks back, 2 weeks ahead.
-  const weights = { 'cut-style': 6, 'mens-cut': 4, 'kids-cut': 2, blowout: 4, 'root-touchup': 4, 'all-over': 2, balayage: 2, gloss: 3, 'deep-cond': 1, keratin: 1, consult: 1, 'bridal-trial': 1 };
+  const weights = { 'haircut-blowout': 8, 'basic-blowout': 4, 'barber-cut': 4, 'root-touch-up-cut': 4, 'glaze-cut': 3, 'partial-highlight': 2,
+    'full-foil-highlight': 2, 'lived-in-partial': 2, 'lived-in-full': 1, 'face-frame-highlight': 2, 'shag-haircut': 2, 'curly-maintenance': 2,
+    'extended-haircut-blowout': 2, 'brush-set-blowout': 2, 'bang-trim': 1, 'youth-haircut': 1, 'color-consultation': 1, 'full-keratin': 1,
+    'single-process-glaze': 2, 'root-touch-up': 2, 'glaze': 1, 'pixie-cut': 1, 'updo': 1 };
   const now = new Date();
   for (let d = -21; d <= 14; d++) {
     const day = addDays(t0, d), key = dKey(day);
@@ -262,8 +336,8 @@ function seed() {
       const w = windowFor(st, key);
       if (!w) continue;
       const pool = [];
-      SERVICES.forEach(sv => { if (canDo(st, sv.id)) for (let i = 0; i < (weights[sv.id] || 1); i++) pool.push(sv.id); });
-      const fill = d < 0 ? 0.62 : d <= 3 ? 0.55 : 0.33;
+      SERVICES.forEach(sv => { if (canDo(st, sv.id) && weights[sv.id]) for (let i = 0; i < weights[sv.id]; i++) pool.push(sv.id); });
+      const fill = d < 0 ? 0.6 : d <= 3 ? 0.5 : 0.3;
       let t = w[0];
       while (t + 30 <= w[1]) {
         if (rnd() < fill) {
@@ -289,16 +363,22 @@ function seed() {
   }
 
   // Waitlist.
-  const sat = nextWorkDay(mar, addDays(t0, 4));
-  s.waitlist.push({ id: uid('w'), clientId: 'c2', serviceId: 'balayage', stylistId: 'marisol', date: dKey(sat), timePref: 'Any time', status: 'open', createdAt: iso(addDays(t0, -2)), note: 'Wants to finish before a wedding that weekend.' });
+  const steph = stById('stephanie');
+  const sat = nextWorkDay(steph, addDays(t0, ((6 - t0.getDay() + 7) % 7) || 7));
+  s.waitlist.push({ id: uid('w'), clientId: 'c2', serviceId: 'lived-in-full', stylistId: 'stephanie', date: dKey(sat), timePref: 'Any time', status: 'open', createdAt: iso(addDays(t0, -2)), note: 'Wants to finish before a wedding that weekend.' });
   const fri = addDays(t0, ((5 - t0.getDay() + 7) % 7) || 7);
-  s.waitlist.push({ id: uid('w'), clientId: 'c3', serviceId: 'mens-cut', stylistId: 'any', date: dKey(fri), timePref: 'Evening (after 5 PM)', status: 'open', createdAt: iso(addDays(t0, -1)), note: '' });
+  s.waitlist.push({ id: uid('w'), clientId: 'c3', serviceId: 'barber-cut', stylistId: 'any', date: dKey(fri), timePref: 'Evening (after 5 PM)', status: 'open', createdAt: iso(addDays(t0, -1)), note: '' });
+  // Fill Stephanie's waitlisted Saturday so the waitlist shows a real "Full" day.
+  { const key = dKey(sat), w = windowFor(steph, key); let t = w[0];
+    while (t + 60 <= w[1]) { const sv = pick(['haircut-blowout', 'glaze-cut', 'basic-blowout']), dur = svcById(sv).dur;
+      if (t + dur <= w[1] && isFree('stephanie', key, t, dur, null)) mk({ clientId: 'c' + (4 + Math.floor(rnd() * 15)), serviceId: sv, stylistId: 'stephanie', key, time: m2hm(t), status: 'confirmed', source: 'Online', createdAt: iso(addDays(sat, -9)) });
+      t += 15; } }
 
   // Recent activity.
   const mayaNext = s.bookings.filter(b => b.clientId === 'c1' && b.status === 'confirmed')[0];
   const recent = [
     { at: new Date(Date.now() - 50 * 6e4).toISOString(), actor: 'Velora reminders', action: "Sent tomorrow's appointment reminders by text", ref: '' },
-    { at: new Date(Date.now() - 3 * 36e5).toISOString(), actor: 'Client (online)', action: 'Joined the waitlist: Balayage with Marisol Reyes', ref: '' },
+    { at: new Date(Date.now() - 3 * 36e5).toISOString(), actor: 'Client (online)', action: 'Joined the waitlist: Lived-in Full Highlight with Stephanie', ref: '' },
   ];
   if (mayaNext) recent.push({ at: new Date(Date.now() - 26 * 36e5).toISOString(), actor: 'Maya Thompson (client)', action: `Confirmed ${svcById(mayaNext.serviceId).name} by text reply`, ref: mayaNext.ref, bookingId: mayaNext.id });
   s.activity = recent.map(a => ({ id: uid('a'), bookingId: '', ...a }));
@@ -495,14 +575,15 @@ function publicShell(inner, active) {
 function pageHome() {
   let svcHtml = '';
   for (const [cat, list] of servicesByCat()) {
-    svcHtml += `<div class="svc-group"><h3>${esc(cat)}</h3><ul class="svc-list">${list.map(s => `
+    svcHtml += `<details class="svc-group"><summary><span>${esc(cat)}</span><span class="count-badge">${list.length}</span></summary><ul class="svc-list">${list.map(s => `
       <li class="svc-row"><div><div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.desc)}</div>
-      <div class="svc-meta">${durLabel(s.dur)} · ${money(s.price)}${depositFor(s) ? ` · ${money(depositFor(s))} deposit` : ''}</div></div>
-      <a class="btn btn-secondary btn-small" href="#/book${qs({ service: s.id })}" aria-label="Book ${esc(s.name)}">Book</a></li>`).join('')}</ul></div>`;
+      <div class="svc-meta">${priceLabel(s)} · about ${durLabel(s.dur)}${depositFor(s) ? ` · ${money(depositFor(s))} deposit` : ''}</div></div>
+      <a class="btn btn-secondary btn-small" href="#/book${qs({ service: s.id })}" aria-label="Book ${esc(s.name)}">Book</a></li>`).join('')}</ul></details>`;
   }
   const team = state.stylists.map(st => `<li class="team-card"><span class="avatar" style="--c:${st.color}">${initials(st.name)}</span>
       <div class="team-body"><div class="team-name">${esc(st.name)}</div><div class="team-title">${esc(st.title)}</div><div class="muted small">Works ${workDays(st)}</div></div>
-      <a class="btn btn-ghost btn-small" href="#/book${qs({ stylist: st.id })}">Book with ${esc(firstName(st.name))}</a></li>`).join('');
+      <a class="btn btn-ghost btn-small" href="#/book${qs({ stylist: st.id })}">Book with ${esc(st.name)}</a></li>`).join('')
+    + HOSPITALITY.map(p => `<li class="team-card"><span class="avatar" style="--c:#9aa29f">${initials(p.name)}</span><div class="team-body"><div class="team-name">${esc(p.name)}</div><div class="team-title">${esc(p.title)}</div><div class="muted small">Front desk. Here to help with bookings.</div></div></li>`).join('');
   return `
   <section class="hero">
     <div class="hero-copy"><p class="eyebrow">Book online, any time</p><h1 class="display">Hair, color and care at Willow &amp; Jade</h1>
@@ -511,7 +592,9 @@ function pageHome() {
     <dl class="hero-facts card"><div><dt>Hours</dt><dd>${hoursSummary()}<br><span class="muted">Closed Sunday and Monday</span></dd></div>
       <div><dt>Call or text</dt><dd>${esc(SALON.phone)}</dd></div><div><dt>Find us</dt><dd>${esc(SALON.address)}</dd></div></dl>
   </section>
-  <section class="section"><div class="section-head"><h2>Services and prices</h2><a class="link" href="#/policies">Deposits and cancellation policy</a></div><div class="svc-cols">${svcHtml}</div></section>
+  <section class="section"><div class="section-head"><h2>Services and prices</h2><a class="link" href="#/policies">Deposits and cancellation policy</a></div>
+    <p class="muted small">Online prices are starting prices. Your final price depends on your stylist's tier (Rising, Willow, Jade or Sage) and, for color, how much color is used.</p>
+    <div class="svc-acc">${svcHtml}</div></section>
   <section class="section"><h2>Our team</h2><ul class="team">${team}</ul></section>`;
 }
 
@@ -526,16 +609,18 @@ function pageBook(q) {
   // Step 1: service
   h += `<li class="step ${svc ? 'is-done' : 'is-current'}" id="step-1"><h2 class="step-title"><span class="step-num">1</span>Choose a service</h2>`;
   if (svc) {
-    h += `<div class="chosen"><div><b>${esc(svc.name)}</b> <span class="muted">· ${durLabel(svc.dur)} · ${money(svc.price)}</span></div><a class="link" href="${base}${qs({ stylist: p.stylist })}">Change</a></div>`;
+    h += `<div class="chosen"><div><b>${esc(svc.name)}</b> <span class="muted">· ${durLabel(svc.dur)} · ${priceLabel(svc)}</span></div><a class="link" href="${base}${qs({ stylist: p.stylist })}">Change</a></div>`;
   } else {
     if (presetSt) h += `<p class="muted">Showing services ${esc(presetSt.name)} offers.</p>`;
+    h += '<div class="svc-acc">';
     for (const [cat, list] of servicesByCat()) {
       const avail = list.filter(s => !presetSt || canDo(presetSt, s.id));
       if (!avail.length) continue;
-      h += `<h3 class="opt-cat">${esc(cat)}</h3><div class="options">${avail.map(s => `
+      h += `<details class="svc-group"><summary><span>${esc(cat)}</span><span class="count-badge">${avail.length}</span></summary><div class="options">${avail.map(s => `
         <a class="option" href="${base}${qs({ service: s.id, stylist: p.stylist })}"><span class="opt-main"><span class="opt-name">${esc(s.name)}</span><span class="opt-desc">${esc(s.desc)}</span></span>
-        <span class="opt-side"><span>${money(s.price)}</span><span class="muted small">${durLabel(s.dur)}</span></span></a>`).join('')}</div>`;
+        <span class="opt-side"><span>${priceLabel(s)}</span><span class="muted small">about ${durLabel(s.dur)}</span></span></a>`).join('')}</div></details>`;
     }
+    h += '</div>';
   }
   h += '</li>';
 
@@ -585,7 +670,7 @@ function pageBook(q) {
         <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}${p.stylist === 'any' ? ' <span class="muted">(first available)</span>' : ''}</b></div>
         <div class="summary-row"><span>When</span><b>${fmtLong(parseDT(p.date))} at ${fmtT(p.time)}</b></div>
         <div class="summary-row"><span>Length</span><b>${durLabel(svc.dur)}</b></div>
-        <div class="summary-row"><span>Price</span><b>${money(svc.price)}</b></div>
+        <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
         ${dep ? `<div class="summary-row"><span>Deposit today</span><b>${money(dep)} <span class="muted">(demo, nothing is charged)</span></b></div>` : ''}</div>
       ${c ? '' : `<p class="muted small">Been here before? <a class="link" href="#/login${qs({ next: location.hash.slice(1) })}">Sign in</a> to fill this in for you.</p>`}
       <form class="form" data-form="book-confirm" novalidate>
@@ -619,7 +704,7 @@ function pageConfirmed(id) {
     <div class="summary"><div class="summary-row"><span>Service</span><b>${esc(svc.name)}</b></div>
       <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}</b></div>
       <div class="summary-row"><span>When</span><b>${fmtWhen(b.start)}</b></div>
-      <div class="summary-row"><span>Price</span><b>${money(svc.price)}</b></div>
+      <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
       ${b.deposit ? `<div class="summary-row"><span>Deposit</span><b>${money(b.deposit.amount)} held (demo)</b></div>` : ''}</div>
     <p class="muted">We'd text a reminder the day before. Need to change it? Use your confirmation number and email on the Change or cancel page.</p>
     <div class="btn-row"><a class="btn btn-primary" href="#/appointment/${b.id}">Manage this booking</a>
@@ -667,7 +752,7 @@ function pageAppointment(id) {
         <div><dt>When</dt><dd>${fmtWhen(b.start)}</dd></div>
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>Length</dt><dd>${durLabel(svc.dur)}</dd></div>
-        <div><dt>Price</dt><dd>${money(svc.price)}</dd></div>
+        <div><dt>Price</dt><dd>${priceLabel(svc)}</dd></div>
         <div><dt>Deposit</dt><dd>${depositText(b)}</dd></div>
         <div><dt>Booked for</dt><dd>${esc(c ? c.name : '')}</dd></div>
       </dl>
@@ -828,7 +913,7 @@ function staffDashboard() {
     let act = '';
     if (b.status === 'booked' || b.status === 'confirmed') act = `<button type="button" class="btn btn-secondary btn-small" data-action="set-status" data-id="${b.id}" data-status="checked-in">Check in</button>`;
     else if (b.status === 'checked-in') act = `<button type="button" class="btn btn-secondary btn-small" data-action="set-status" data-id="${b.id}" data-status="completed">Complete</button>`;
-    return `<tr><td class="nowrap">${fmtTime(parseDT(b.start))}</td><td><a class="link" href="#/staff/client/${c.id}">${esc(c.name)}</a>${b.lateNotice ? ` <span class="tag warn">${b.lateNotice.minutes} min late</span>` : ''}</td><td>${esc(svc.name)}</td><td>${stDot(st)} ${esc(firstName(st.name))}</td><td>${pill(b.status)}</td><td class="right"><a class="btn btn-ghost btn-small" href="#/staff/booking/${b.id}">Open</a> ${act}</td></tr>`;
+    return `<tr><td class="nowrap">${fmtTime(parseDT(b.start))}</td><td><a class="link" href="#/staff/client/${c.id}">${esc(c.name)}</a>${b.lateNotice ? ` <span class="tag warn">${b.lateNotice.minutes} min late</span>` : ''}</td><td>${esc(svc.name)}</td><td>${stDot(st)} ${esc(st.name)}</td><td>${pill(b.status)}</td><td class="right"><a class="btn btn-ghost btn-small" href="#/staff/booking/${b.id}">Open</a> ${act}</td></tr>`;
   };
   const attn = [];
   late.forEach(b => attn.push(`<li><span class="tag warn">Running late</span> ${esc(clById(b.clientId).name)} is about ${b.lateNotice.minutes} min late for ${fmtTime(parseDT(b.start))}. <a class="link" href="#/staff/booking/${b.id}">Open</a></li>`));
@@ -907,12 +992,13 @@ function staffBookings(q) {
       <label class="field grow"><span>Search</span><input name="q" value="${esc(q.get('q') || '')}" placeholder="Name, email, service or WJ- number"></label>
       <button type="submit" class="btn btn-secondary">Search</button></form>
     <div class="card">${shown.length ? `<table class="table"><thead><tr><th>Ref</th><th>When</th><th>Client</th><th>Service</th><th>Stylist</th><th>Status</th><th>Source</th></tr></thead><tbody>
-      ${shown.map(b => { const c = clById(b.clientId), st = stById(b.stylistId); return `<tr><td><a class="link" href="#/staff/booking/${b.id}">${b.ref}</a></td><td class="nowrap">${fmtShortWhen(b.start)}</td><td>${esc(c.name)}</td><td>${esc(svcById(b.serviceId).name)}</td><td>${stDot(st)} ${esc(firstName(st.name))}</td><td>${pill(b.status)}${b.fee && b.fee.status === 'pending' ? ' <span class="tag warn">Fee</span>' : ''}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join('')}
+      ${shown.map(b => { const c = clById(b.clientId), st = stById(b.stylistId); return `<tr><td><a class="link" href="#/staff/booking/${b.id}">${b.ref}</a></td><td class="nowrap">${fmtShortWhen(b.start)}</td><td>${esc(c.name)}</td><td>${esc(svcById(b.serviceId).name)}</td><td>${stDot(st)} ${esc(st.name)}</td><td>${pill(b.status)}${b.fee && b.fee.status === 'pending' ? ' <span class="tag warn">Fee</span>' : ''}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join('')}
       </tbody></table>${list.length > shown.length ? `<p class="muted small">Showing the first ${shown.length}. Narrow the filters to see more.</p>` : ''}` : emptyState('No bookings match those filters.')}</div>`;
 }
 
 function timeFields({ service, stylist, date, current }) {
-  return `<label class="field"><span>Service</span><select name="service" data-recalc-field>${SERVICES.map(s => `<option value="${s.id}" ${s.id === service ? 'selected' : ''}>${esc(s.name)} · ${durLabel(s.dur)} · ${money(s.price)}</option>`).join('')}</select></label>
+  const groups = [...servicesByCat()].map(([cat, list]) => `<optgroup label="${esc(cat)}">${list.map(s => `<option value="${s.id}" ${s.id === service ? 'selected' : ''}>${esc(s.name)} · ${durLabel(s.dur)} · ${priceLabel(s)}</option>`).join('')}</optgroup>`).join('');
+  return `<label class="field"><span>Service</span><select name="service" data-recalc-field>${groups}</select></label>
     <label class="field"><span>Stylist</span><select name="stylist" data-recalc-field><option value="any" ${stylist === 'any' ? 'selected' : ''}>Any available</option>${state.stylists.map(st => `<option value="${st.id}" ${st.id === stylist ? 'selected' : ''}>${esc(st.name)}</option>`).join('')}</select></label>
     <label class="field"><span>Date</span><input type="date" name="date" value="${date}" min="${dKey(today0())}" required data-recalc-field></label>
     <label class="field"><span>Time</span><select name="time" required data-current="${current || ''}"></select><small class="muted" data-slot-hint></small></label>`;
@@ -957,7 +1043,7 @@ function staffBooking(id) {
     <div class="grid-2">
       <section class="card"><h2 class="h3">Details</h2><dl class="details">
         <div><dt>Client</dt><dd><a class="link" href="#/staff/client/${c.id}">${esc(c.name)}</a><br><span class="muted small">${esc(c.email)} · ${esc(c.phone)}</span></dd></div>
-        <div><dt>Service</dt><dd>${esc(svc.name)} · ${durLabel(svc.dur)} · ${money(svc.price)}</dd></div>
+        <div><dt>Service</dt><dd>${esc(svc.name)} · ${durLabel(svc.dur)} · ${priceLabel(svc)}</dd></div>
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>When</dt><dd>${fmtWhen(b.start)} to ${fmtTime(parseDT(b.end))}</dd></div>
         <div><dt>Booked via</dt><dd>${esc(b.source)} · ${fmtStamp(b.createdAt)}</dd></div>
@@ -1020,7 +1106,7 @@ function staffAvailability() {
       <td><input type="checkbox" name="on-${d}" ${h && salonOpen ? 'checked' : ''} ${salonOpen ? '' : 'disabled'} aria-label="${esc(st.name)} works ${DAYS[d]}"></td>
       <td><input type="time" name="start-${d}" value="${h ? h[0] : (SALON.hours[d] || ['09:00'])[0]}" step="900" ${salonOpen ? '' : 'disabled'} aria-label="${DAYS[d]} start"></td>
       <td><input type="time" name="end-${d}" value="${h ? h[1] : (SALON.hours[d] || ['09:00', '17:00'])[1]}" step="900" ${salonOpen ? '' : 'disabled'} aria-label="${DAYS[d]} end"></td></tr>`; }).join('')}
-    </tbody></table><p class="muted small">Salon is closed Sunday and Monday.</p><button type="submit" class="btn btn-secondary btn-small">Save ${esc(firstName(st.name))}'s hours</button></form></section>`).join('');
+    </tbody></table><p class="muted small">Salon is closed Sunday and Monday.</p><button type="submit" class="btn btn-secondary btn-small">Save ${esc(st.name)}'s hours</button></form></section>`).join('');
   const tk = dKey(today0());
   const blocks = state.blocks.filter(k => k.date >= tk).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
   return `<div class="page-head"><h1>Availability</h1><p class="muted">Working hours and time off control what clients can book online.</p></div>
@@ -1090,7 +1176,7 @@ function newBookingModal(d = {}) {
   if (date < t0) date = t0;
   const clients = state.clients.slice().sort((a, b) => a.name.localeCompare(b.name));
   const presetSt = d.stylist && d.stylist !== 'any' ? stById(d.stylist) : null;
-  const service = d.service || (presetSt && !canDo(presetSt, 'cut-style') ? SERVICES.find(s => canDo(presetSt, s.id)).id : 'cut-style');
+  const service = d.service || (presetSt && !canDo(presetSt, 'haircut-blowout') ? SERVICES.find(s => canDo(presetSt, s.id)).id : 'haircut-blowout');
   openModal(`<h2>New booking</h2>
     <form class="form" data-form="staff-new" data-recalc data-waitlist="${d.waitlist || ''}">
       <label class="field"><span>Client</span><select name="clientId" data-client-select><option value="new">+ New client</option>${clients.map(c => `<option value="${c.id}" ${c.id === d.client ? 'selected' : ''}>${esc(c.name)} · ${esc(c.email)}</option>`).join('')}</select></label>
