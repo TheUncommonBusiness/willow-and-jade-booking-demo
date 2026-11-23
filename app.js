@@ -7,7 +7,7 @@
 'use strict';
 
 /* ---------------- constants ---------------- */
-const STORE_KEY = 'velora-wj-demo-v2';
+const STORE_KEY = 'velora-wj-demo-v3';
 const SESSION_KEY = 'velora-wj-session-v1';
 const GUEST_KEY = 'velora-wj-guest-v1';
 const RESEED_AFTER_DAYS = 14;
@@ -25,7 +25,7 @@ const SALON = {
   address: '123 Demo Street, Suite 4, Anytown, USA',
   phone: '(555) 555-0142',
   email: 'hello@willowandjade.example',
-  hours: { 0: null, 1: null, 2: ['09:00', '19:00'], 3: ['09:00', '19:00'], 4: ['09:00', '19:00'], 5: ['09:00', '19:00'], 6: ['08:00', '16:00'] },
+  hours: { 0: ['09:00', '17:00'], 1: null, 2: ['10:00', '19:00'], 3: ['10:00', '20:00'], 4: ['11:00', '20:00'], 5: ['10:00', '20:00'], 6: ['09:00', '17:00'] },
 };
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const WEEK_ORDER = [2, 3, 4, 5, 6, 0, 1];
@@ -110,19 +110,19 @@ const SERVICES = [
 
 const H = (a, b) => [a, b];
 const STYLISTS = [
-  { id: 'emma-s', name: 'Emma S', title: 'Rising Stylist', color: '#7a9e7e', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('11:00', '19:00'), 5: H('09:00', '17:00'), 6: H('08:00', '14:00') } },
-  { id: 'alanna', name: 'Alanna', title: 'Willow Stylist', color: '#2f6f5e', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('10:00', '18:00'), 4: H('10:00', '18:00'), 6: H('08:00', '16:00') } },
-  { id: 'julez', name: 'Julez', title: 'Jade Stylist', color: '#8a5a83', services: 'all', hours: { 3: H('11:00', '19:00'), 4: H('11:00', '19:00'), 5: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
-  { id: 'nicolette', name: 'Nicolette', title: 'Willow Stylist', color: '#b8743a', services: 'all', hours: { 2: H('09:00', '17:00'), 4: H('09:00', '17:00'), 5: H('09:00', '17:00'), 6: H('08:00', '14:00') } },
-  { id: 'kelley', name: 'Kelley', title: 'Sage Stylist', color: '#4a6fa5', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('09:00', '17:00'), 4: H('11:00', '19:00'), 5: H('09:00', '17:00') } },
-  { id: 'nikki-v', name: 'Nikki V', title: 'Jade Stylist', color: '#a0525c', services: 'all', hours: { 2: H('10:00', '16:00'), 3: H('10:00', '16:00'), 4: H('10:00', '16:00') } },
-  { id: 'cristina', name: 'Cristina', title: 'Willow Stylist', color: '#5b7f95', services: 'all', hours: { 3: H('09:00', '17:00'), 4: H('11:00', '19:00'), 5: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
-  { id: 'nikki-g', name: 'Nikki G', title: 'Sage Stylist', color: '#6d6a3a', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('09:00', '17:00'), 5: H('09:00', '17:00'), 6: H('08:00', '16:00') } },
-  { id: 'sam-h', name: 'Sam H', title: 'Willow Stylist', color: '#9a6b3f', services: 'all', hours: { 2: H('09:00', '17:00'), 3: H('09:00', '17:00'), 5: H('11:00', '19:00'), 6: H('08:00', '14:00') } },
-  { id: 'stephanie', name: 'Stephanie', title: 'Jade Stylist', color: '#3f7d74', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('10:00', '18:00'), 5: H('10:00', '18:00'), 6: H('08:00', '16:00') } },
-  { id: 'sam-d', name: 'Sam D', title: 'Willow Stylist', color: '#7b5ea7', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('11:00', '19:00'), 6: H('08:00', '16:00') } },
+  { id: 'emma-s', name: 'Emma S', title: 'Rising Stylist', color: '#7a9e7e', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('12:00', '20:00'), 5: H('10:00', '18:00'), 0: H('09:00', '17:00') } },
+  { id: 'alanna', name: 'Alanna', title: 'Willow Stylist', color: '#2f6f5e', services: 'all', hours: { 2: H('10:00', '19:00'), 3: H('10:00', '18:00'), 4: H('11:00', '19:00'), 6: H('09:00', '17:00') } },
+  { id: 'julez', name: 'Julez', title: 'Jade Stylist', color: '#8a5a83', services: 'all', hours: { 3: H('12:00', '20:00'), 4: H('12:00', '20:00'), 5: H('12:00', '20:00'), 6: H('09:00', '17:00') } },
+  { id: 'nicolette', name: 'Nicolette', title: 'Willow Stylist', color: '#b8743a', services: 'all', hours: { 2: H('10:00', '18:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 0: H('09:00', '17:00') } },
+  { id: 'kelley', name: 'Kelley', title: 'Sage Stylist', color: '#4a6fa5', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('10:00', '18:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00') } },
+  { id: 'nikki-v', name: 'Nikki V', title: 'Jade Stylist', color: '#a0525c', services: 'all', hours: { 2: H('10:00', '16:00'), 3: H('10:00', '16:00'), 4: H('11:00', '17:00') } },
+  { id: 'cristina', name: 'Cristina', title: 'Willow Stylist', color: '#5b7f95', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('12:00', '20:00'), 5: H('12:00', '20:00'), 6: H('09:00', '17:00') } },
+  { id: 'nikki-g', name: 'Nikki G', title: 'Sage Stylist', color: '#6d6a3a', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 6: H('09:00', '17:00') } },
+  { id: 'sam-h', name: 'Sam H', title: 'Willow Stylist', color: '#9a6b3f', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('10:00', '18:00'), 5: H('12:00', '20:00'), 0: H('09:00', '17:00') } },
+  { id: 'stephanie', name: 'Stephanie', title: 'Jade Stylist', color: '#3f7d74', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 6: H('09:00', '17:00') } },
+  { id: 'sam-d', name: 'Sam D', title: 'Willow Stylist', color: '#7b5ea7', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('12:00', '20:00'), 6: H('09:00', '17:00'), 0: H('09:00', '17:00') } },
 ];
-const HOSPITALITY = [{ name: 'Anna', title: 'Guest Hospitality' }, { name: 'Sarah', title: 'Guest Hospitality' }];
+const HOSPITALITY = [{ name: 'Ashleigh', title: 'Guest Hospitality Specialist and Bridal Coordinator' }, { name: 'Anna', title: 'Guest Hospitality' }, { name: 'Sarah', title: 'Guest Hospitality' }];
 const priceLabel = s => (s.from ? 'from ' : '') + money(s.price);
 
 const CLIENT_NAMES = ['Maya Thompson', 'Priya Shah', 'Noah Bennett', 'Chloe Nguyen', 'Ethan Wallace', 'Zoe Patel', 'Lucas Moreno',
@@ -190,7 +190,7 @@ const canDo = (st, sid) => {
   if (svc && svc.only && !svc.only.includes(st.id)) return false;
   return st.services === 'all' || st.services.includes(sid);
 };
-const depositFor = svc => (svc && svc.price >= state.settings.depositMin ? Math.round(svc.price * state.settings.depositPct / 100) : 0);
+const needsUpfront = svc => !!svc && svc.dur >= state.settings.upfrontMinutes;
 
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: demo still runs */ } }
 
@@ -265,7 +265,7 @@ function seed() {
     version: 1, seededOn: dKey(t0), refSeq: 4180,
     stylists: JSON.parse(JSON.stringify(STYLISTS)),
     clients: [], bookings: [], blocks: [], waitlist: [], activity: [],
-    settings: { cancelWindowHours: 24, lateFeePct: 50, depositMin: 150, depositPct: 25, graceMinutes: 15 },
+    settings: { fee48: 25, fee24: 50, noShowFee: 50, upfrontMinutes: 180, lateFeePerMin: 1, guaranteeHours: 72 },
   };
   state = s;
 
@@ -286,8 +286,8 @@ function seed() {
       stylistId: o.stylistId, start: `${o.key}T${o.time}`, end: `${o.key}T${m2hm(startM + svc.dur)}`, status: o.status,
       source: o.source || 'Online', notes: o.notes || '', staffNotes: '', createdAt: o.createdAt, updatedAt: o.createdAt,
       deposit: null, lateCancel: false, fee: null, cancelReason: '', lateNotice: null, history: [] };
-    const dep = depositFor(svc);
-    if (dep) b.deposit = { amount: dep, status: { completed: 'applied', cancelled: 'refunded', 'no-show': 'forfeited' }[o.status] || 'held' };
+    if (needsUpfront(svc)) b.deposit = { status: { completed: 'applied to final balance', cancelled: 'kept (nonrefundable)', 'no-show': 'kept (no-show)' }[o.status] || 'held' };
+    else if (o.status === 'no-show') b.fee = { amount: s.settings.noShowFee, status: 'charged', reason: 'no-show' };
     if (o.status === 'cancelled') b.cancelReason = pick(CANCEL_REASONS.slice(0, 4));
     b.history.push({ at: o.createdAt, actor: o.source === 'Online' ? 'Client (online)' : 'Front Desk', text: `Booked ${svc.name} with ${stById(o.stylistId).name} (${b.source})` });
     if (o.status === 'confirmed') b.history.push({ at: o.createdAt, actor: 'Velora reminders', text: 'Client confirmed by text reply' });
@@ -389,6 +389,7 @@ function seed() {
 function session() { try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; } }
 function setSession(v) { try { v ? localStorage.setItem(SESSION_KEY, JSON.stringify(v)) : localStorage.removeItem(SESSION_KEY); } catch (e) { /* ignore */ } }
 const isStaff = () => { const s = session(); return !!s && s.role === 'staff'; };
+const isAgent = () => { const s = session(); return !!s && s.email === 'agent@willowandjade.example'; };
 function currentClient() { const s = session(); if (!s || s.role !== 'client') return null; return state.clients.find(c => c.email.toLowerCase() === s.email); }
 function guestIds() { try { return JSON.parse(sessionStorage.getItem(GUEST_KEY) || '[]'); } catch (e) { return []; } }
 function grantGuest(id) { try { const g = guestIds(); if (!g.includes(id)) g.push(id); sessionStorage.setItem(GUEST_KEY, JSON.stringify(g)); } catch (e) { /* ignore */ } }
@@ -429,13 +430,36 @@ function createBooking(o) {
     start: `${o.key}T${o.time}`, end: `${o.key}T${m2hm(hm2m(o.time) + svc.dur)}`, status: o.status || 'booked',
     source: o.source || 'Online', notes: o.notes || '', staffNotes: '', createdAt: now, updatedAt: now,
     deposit: null, lateCancel: false, fee: null, cancelReason: '', lateNotice: null, history: [] };
-  const dep = depositFor(svc);
-  if (dep) b.deposit = { amount: dep, status: 'held' };
+  if (needsUpfront(svc)) b.deposit = { status: 'held' };
   hist(b, `Booked ${describe(b)} (${b.source})`);
   state.bookings.push(b);
   log(`Created booking: ${describe(b)}`, b);
   save();
   return { booking: b };
+}
+
+/* Change and cancellation rules (from the salon's policy):
+   more than 48 hrs ahead: no charge · within 48 hrs: $25 · within 24 hrs: $50 · no-show: $50.
+   Appointments of 3+ hrs hold an upfront payment. Inside 48 hrs we keep it instead of charging the fee, never both. */
+function changeFee(b) {
+  const hrs = (parseDT(b.start) - new Date()) / 36e5;
+  const s = state.settings;
+  const held = !!(b.deposit && b.deposit.status === 'held');
+  if (hrs >= 48) return { hrs, fee: 0, keepsDeposit: false, window: '' };
+  if (held) return { hrs, fee: 0, keepsDeposit: true, window: hrs < 24 ? '24' : '48' };
+  return { hrs, fee: hrs < 24 ? s.fee24 : s.fee48, keepsDeposit: false, window: hrs < 24 ? '24' : '48' };
+}
+function addFee(b, amount, reason) {
+  if (!amount) return;
+  if (b.fee && b.fee.status === 'charged') { b.fee.amount += amount; b.fee.reason += `; ${reason}`; }
+  else b.fee = { amount, status: 'charged', reason };
+  hist(b, `${money(amount)} charged to card on file (demo): ${reason}`);
+}
+function feeWarning(b) {
+  const i = changeFee(b);
+  if (i.hrs >= 48 || i.hrs < 0) return '';
+  if (i.keepsDeposit) return `This appointment is within 48 hours. If it's changed or cancelled now, the upfront payment is kept (no extra charge on top).`;
+  return `This appointment is within ${i.window} hours. Changing or cancelling it now means a ${money(i.fee)} charge to the card on file.`;
 }
 
 function moveBooking(b, { key, time, stylistId, serviceId }) {
@@ -452,38 +476,43 @@ function moveBooking(b, { key, time, stylistId, serviceId }) {
   if (isPast(key, time)) return { error: 'That time has already passed.' };
   if (!isFree(stId, key, hm2m(time), svc.dur, b.id)) return { error: 'That time overlaps another booking, time off, or is outside working hours.' };
   const before = describe(b);
+  const timeChanged = `${key}T${time}` !== b.start || stId !== b.stylistId;
+  const info = timeChanged ? changeFee(b) : { hrs: 99, fee: 0, keepsDeposit: false };
   b.serviceId = svcId; b.stylistId = stId; b.start = `${key}T${time}`; b.end = `${key}T${m2hm(hm2m(time) + svc.dur)}`;
-  if (!b.deposit || b.deposit.status === 'held') { const dep = depositFor(svc); b.deposit = dep ? { amount: dep, status: 'held' } : null; }
+  if (info.keepsDeposit) {
+    hist(b, 'Upfront payment kept: changed within 48 hours');
+    b.deposit = needsUpfront(svc) ? { status: 'held' } : null;
+  } else if (!b.deposit || b.deposit.status === 'held') {
+    b.deposit = needsUpfront(svc) ? { status: 'held' } : (b.deposit ? { status: 'held' } : null);
+  }
+  if (info.fee) addFee(b, info.fee, `changed within ${info.window} hours`);
   b.lateNotice = null;
   hist(b, `Changed from ${before} to ${describe(b)}`);
-  log(`Rescheduled to ${describe(b)} (was ${before})`, b);
+  log(`Rescheduled to ${describe(b)} (was ${before})${info.fee ? `. ${money(info.fee)} change charge.` : ''}${info.keepsDeposit ? '. Upfront payment kept.' : ''}`, b);
   save();
-  return { booking: b };
-}
-
-function lateInfo(b) {
-  const hrs = (parseDT(b.start) - new Date()) / 36e5;
-  const late = hrs < state.settings.cancelWindowHours;
-  return { late, fee: Math.round(svcById(b.serviceId).price * state.settings.lateFeePct / 100) };
+  return { booking: b, fee: info.fee, keptDeposit: info.keepsDeposit };
 }
 
 function cancelBooking(b, reason) {
-  const { late, fee } = lateInfo(b);
-  b.status = 'cancelled'; b.cancelReason = reason || 'Other'; b.lateCancel = late; b.lateNotice = null;
-  if (late && fee > 0) { b.fee = { amount: fee, status: 'pending' }; if (b.deposit && b.deposit.status === 'held') b.deposit.status = 'kept toward fee'; }
-  else if (b.deposit && b.deposit.status === 'held') b.deposit.status = 'refunded';
-  hist(b, `Cancelled (${b.cancelReason})${late ? ', inside the cancellation window' : ''}`);
-  log(`Cancelled ${describe(b)}. Reason: ${b.cancelReason}${late ? '. Late cancellation.' : ''}`, b);
+  const info = changeFee(b);
+  b.status = 'cancelled'; b.cancelReason = reason || 'Other'; b.lateCancel = info.hrs < 48; b.lateNotice = null;
+  if (b.deposit && b.deposit.status === 'held') b.deposit.status = 'kept (nonrefundable)';
+  if (info.fee) addFee(b, info.fee, `cancelled within ${info.window} hours`);
+  hist(b, `Cancelled (${b.cancelReason})`);
+  log(`Cancelled ${describe(b)}. Reason: ${b.cancelReason}${info.fee ? `. ${money(info.fee)} charge.` : ''}${info.keepsDeposit ? '. Upfront payment kept.' : ''}`, b);
   save();
-  return { late, fee };
+  return info;
 }
 
 function setStatus(b, status) {
   const prev = b.status;
   if (prev === status) return;
   b.status = status;
-  if (status === 'completed' && b.deposit && b.deposit.status === 'held') b.deposit.status = 'applied';
-  if (status === 'no-show' && b.deposit && b.deposit.status === 'held') b.deposit.status = 'forfeited';
+  if (status === 'completed' && b.deposit && b.deposit.status === 'held') b.deposit.status = 'applied to final balance';
+  if (status === 'no-show') {
+    if (b.deposit && b.deposit.status === 'held') b.deposit.status = 'kept (no-show)';
+    else addFee(b, state.settings.noShowFee, 'no-show');
+  }
   if (status !== 'checked-in') b.lateNotice = null;
   hist(b, `Status changed from ${STATUS[prev]} to ${STATUS[status]}`);
   log(`Marked ${STATUS[status].toLowerCase()}: ${describe(b)}`, b);
@@ -496,7 +525,7 @@ function restoreBooking(b) {
   if (isPast(key, time)) return { error: 'That appointment time has passed. Make a new booking instead.' };
   if (!isFree(b.stylistId, key, hm2m(time), svc.dur, b.id)) return { error: 'That time has been booked by someone else. Reschedule instead.' };
   b.status = 'booked'; b.lateCancel = false; b.fee = null; b.cancelReason = '';
-  if (b.deposit && b.deposit.status !== 'applied') b.deposit.status = 'held';
+  if (b.deposit) b.deposit.status = 'held';
   hist(b, 'Restored cancelled booking');
   log(`Restored ${describe(b)}`, b);
   save();
@@ -506,13 +535,27 @@ function restoreBooking(b) {
 /* ---------------- shared bits ---------------- */
 const pill = s => `<span class="pill pill-${s}">${STATUS[s]}</span>`;
 const stDot = st => `<span class="dot" style="--c:${st.color}"></span>`;
-function hoursSummary() { return 'Tue to Fri 9 AM to 7 PM · Sat 8 AM to 4 PM'; }
+function hoursSummary() { return 'Tue 10 to 7 · Wed 10 to 8 · Thu 11 to 8 · Fri 10 to 8 · Sat and Sun 9 to 5'; }
 function workDays(st) { return WEEK_ORDER.filter(d => st.hours[d] && SALON.hours[d]).map(d => DAYS[d].slice(0, 3)).join(', '); }
 function servicesByCat() { const m = new Map(); SERVICES.forEach(s => { if (!m.has(s.cat)) m.set(s.cat, []); m.get(s.cat).push(s); }); return m; }
 function upcomingActive(b) { return ['booked', 'confirmed'].includes(b.status) && parseDT(b.start) > new Date(); }
 function depositText(b) {
-  if (!b.deposit) return 'No deposit';
-  return `${money(b.deposit.amount)} deposit · ${b.deposit.status}`;
+  if (!b.deposit) return 'None needed';
+  return `Upfront payment on card · ${b.deposit.status}`;
+}
+/* Kelley approves fee waivers and upfront payment refunds. The AI agent can only request them. */
+const actBtn = (action, id, to, label) => `<button type="button" class="btn btn-ghost btn-small" data-action="${action}" data-id="${id}" data-to="${to}">${label}</button>`;
+function feeButtons(b) {
+  if (!b.fee) return '';
+  if (b.fee.status === 'charged') return isAgent() ? actBtn('fee', b.id, 'waiver requested', 'Ask Kelley to waive') : actBtn('fee', b.id, 'waived (Kelley approved)', 'Waive (Kelley approved)');
+  if (b.fee.status === 'waiver requested') return isAgent() ? '<span class="muted small">Waiting on Kelley.</span>' : actBtn('fee', b.id, 'waived (Kelley approved)', 'Approve waiver (Kelley)') + actBtn('fee', b.id, 'charged', 'Keep the charge');
+  return '';
+}
+function depButtons(b) {
+  if (!b.deposit) return '';
+  if (b.deposit.status.startsWith('kept')) return isAgent() ? actBtn('deposit', b.id, 'refund requested', 'Ask Kelley to refund') : actBtn('deposit', b.id, 'refunded (Kelley approved)', 'Refund (Kelley approved)');
+  if (b.deposit.status === 'refund requested') return isAgent() ? '<span class="muted small">Waiting on Kelley.</span>' : actBtn('deposit', b.id, 'refunded (Kelley approved)', 'Approve refund (Kelley)') + actBtn('deposit', b.id, 'kept (nonrefundable)', 'Keep it');
+  return '';
 }
 function emptyState(text, action = '') { return `<div class="empty"><p>${text}</p>${action}</div>`; }
 
@@ -577,7 +620,7 @@ function pageHome() {
   for (const [cat, list] of servicesByCat()) {
     svcHtml += `<details class="svc-group"><summary><span>${esc(cat)}</span><span class="count-badge">${list.length}</span></summary><ul class="svc-list">${list.map(s => `
       <li class="svc-row"><div><div class="svc-name">${esc(s.name)}</div><div class="svc-desc">${esc(s.desc)}</div>
-      <div class="svc-meta">${priceLabel(s)} · about ${durLabel(s.dur)}${depositFor(s) ? ` · ${money(depositFor(s))} deposit` : ''}</div></div>
+      <div class="svc-meta">${priceLabel(s)} · about ${durLabel(s.dur)}${needsUpfront(s) ? ' · upfront payment to hold your chair' : ''}</div></div>
       <a class="btn btn-secondary btn-small" href="#/book${qs({ service: s.id })}" aria-label="Book ${esc(s.name)}">Book</a></li>`).join('')}</ul></details>`;
   }
   const team = state.stylists.map(st => `<li class="team-card"><span class="avatar" style="--c:${st.color}">${initials(st.name)}</span>
@@ -589,10 +632,10 @@ function pageHome() {
     <div class="hero-copy"><p class="eyebrow">Book online, any time</p><h1 class="display">Hair, color and care at Willow &amp; Jade</h1>
       <p class="lead">Pick a service, choose your stylist and grab a time that works for you. Need to move or cancel? You can do that here too.</p>
       <div class="hero-actions"><a class="btn btn-primary" href="#/book">Book an appointment</a><a class="btn btn-secondary" href="#/manage">Change or cancel a booking</a></div></div>
-    <dl class="hero-facts card"><div><dt>Hours</dt><dd>${hoursSummary()}<br><span class="muted">Closed Sunday and Monday</span></dd></div>
+    <dl class="hero-facts card"><div><dt>Hours</dt><dd>${hoursSummary()}<br><span class="muted">Closed Monday (education day)</span></dd></div>
       <div><dt>Call or text</dt><dd>${esc(SALON.phone)}</dd></div><div><dt>Find us</dt><dd>${esc(SALON.address)}</dd></div></dl>
   </section>
-  <section class="section"><div class="section-head"><h2>Services and prices</h2><a class="link" href="#/policies">Deposits and cancellation policy</a></div>
+  <section class="section"><div class="section-head"><h2>Services and prices</h2><a class="link" href="#/policies">Booking policies</a></div>
     <p class="muted small">Online prices are starting prices. Your final price depends on your stylist's tier (Rising, Willow, Jade or Sage) and, for color, how much color is used.</p>
     <div class="svc-acc">${svcHtml}</div></section>
   <section class="section"><h2>Our team</h2><ul class="team">${team}</ul></section>`;
@@ -665,25 +708,25 @@ function pageBook(q) {
     } else {
       const st = stById(slot.stylistId);
       const c = currentClient();
-      const dep = depositFor(svc);
+      const dep = needsUpfront(svc);
       h += `<div class="summary card"><div class="summary-row"><span>Service</span><b>${esc(svc.name)}</b></div>
         <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}${p.stylist === 'any' ? ' <span class="muted">(first available)</span>' : ''}</b></div>
         <div class="summary-row"><span>When</span><b>${fmtLong(parseDT(p.date))} at ${fmtT(p.time)}</b></div>
         <div class="summary-row"><span>Length</span><b>${durLabel(svc.dur)}</b></div>
         <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
-        ${dep ? `<div class="summary-row"><span>Deposit today</span><b>${money(dep)} <span class="muted">(demo, nothing is charged)</span></b></div>` : ''}</div>
+        ${dep ? `<div class="summary-row"><span>Upfront payment</span><b>Needed to hold your chair (3+ hour appointment). Applies to your final balance. Nonrefundable. <span class="muted">Demo: nothing is charged.</span></b></div>` : ''}</div>
       ${c ? '' : `<p class="muted small">Been here before? <a class="link" href="#/login${qs({ next: location.hash.slice(1) })}">Sign in</a> to fill this in for you.</p>`}
-      <form class="form" data-form="book-confirm" novalidate>
+      <form novalidate class="form" data-form="book-confirm" novalidate>
         <input type="hidden" name="service" value="${svc.id}"><input type="hidden" name="stylist" value="${esc(p.stylist)}">
         <input type="hidden" name="date" value="${p.date}"><input type="hidden" name="time" value="${p.time}">
         <div class="form-grid">
-          <label class="field"><span>Full name</span><input id="bk-name" name="name" autocomplete="name" required value="${esc(c ? c.name : '')}"></label>
-          <label class="field"><span>Email</span><input id="bk-email" name="email" type="email" autocomplete="email" required value="${esc(c ? c.email : '')}" ${c ? 'readonly' : ''}></label>
+          <label class="field"><span>Full name</span><input id="bk-name" name="name" autocomplete="name" value="${esc(c ? c.name : '')}"></label>
+          <label class="field"><span>Email</span><input id="bk-email" name="email" type="email" autocomplete="email" value="${esc(c ? c.email : '')}" ${c ? 'readonly' : ''}></label>
           <label class="field"><span>Mobile phone</span><input id="bk-phone" name="phone" type="tel" autocomplete="tel" value="${esc(c ? c.phone : '')}" placeholder="(555) 555-0100"></label>
           <label class="field field-wide"><span>Anything your stylist should know? (optional)</span><textarea id="bk-notes" name="notes" rows="3" placeholder="Hair goals, allergies, inspiration photos to bring..."></textarea></label>
         </div>
-        <label class="check"><input type="checkbox" name="agree" id="bk-agree" required aria-label="I agree to the cancellation policy"> <span>I agree to the <a class="link" href="#/policies" target="_blank">cancellation policy</a>: cancel or change at least ${state.settings.cancelWindowHours} hours ahead, or a ${state.settings.lateFeePct}% fee may apply.</span></label>
-        <p class="muted small">Demo site: please use made-up details, not real personal information.</p>
+        <label class="check"><input type="checkbox" name="agree" id="bk-agree" checked aria-label="I agree to the booking policies"> <span>I agree to the <a class="link" href="#/policies" target="_blank">booking policies</a>: changes within 48 hours are ${money(state.settings.fee48)}, within 24 hours ${money(state.settings.fee24)}, no-shows ${money(state.settings.noShowFee)}, and late arrivals ${money(state.settings.lateFeePerMin)} a minute. A card on file holds every appointment.</span></label>
+        <p class="muted small">Demo site: every field is optional and no card is collected. Please use made-up details, not real personal information.</p>
         <button type="submit" class="btn btn-primary btn-lg">Confirm booking</button>
       </form>`;
     }
@@ -705,7 +748,7 @@ function pageConfirmed(id) {
       <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}</b></div>
       <div class="summary-row"><span>When</span><b>${fmtWhen(b.start)}</b></div>
       <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
-      ${b.deposit ? `<div class="summary-row"><span>Deposit</span><b>${money(b.deposit.amount)} held (demo)</b></div>` : ''}</div>
+      ${b.deposit ? `<div class="summary-row"><span>Upfront payment</span><b>Held on card (demo)</b></div>` : ''}</div>
     <p class="muted">We'd text a reminder the day before. Need to change it? Use your confirmation number and email on the Change or cancel page.</p>
     <div class="btn-row"><a class="btn btn-primary" href="#/appointment/${b.id}">Manage this booking</a>
       <button type="button" class="btn btn-secondary" data-action="ics" data-id="${b.id}">Add to calendar</button>
@@ -716,9 +759,9 @@ function pageManage() {
   const maya = state.bookings.filter(b => b.clientId === 'c1' && upcomingActive(b)).sort((a, b) => a.start.localeCompare(b.start))[0];
   return `<div class="narrow">
     <div class="page-head"><h1>Change or cancel a booking</h1><p class="muted">Enter your confirmation number and the email you booked with.</p></div>
-    <form class="form card" data-form="manage-lookup">
-      <label class="field"><span>Confirmation number</span><input id="mg-ref" name="ref" required placeholder="WJ-1234" autocomplete="off"></label>
-      <label class="field"><span>Email</span><input id="mg-email" name="email" type="email" required autocomplete="email"></label>
+    <form novalidate class="form card" data-form="manage-lookup">
+      <label class="field"><span>Confirmation number</span><input id="mg-ref" name="ref" placeholder="WJ-1234" autocomplete="off"></label>
+      <label class="field"><span>Email (optional)</span><input id="mg-email" name="email" type="email" autocomplete="email"></label>
       <button type="submit" class="btn btn-primary">Find my booking</button>
     </form>
     <p class="muted small">Have an account? <a class="link" href="#/login">Sign in</a> to see all your appointments.</p>
@@ -732,7 +775,7 @@ function pageAppointment(id) {
   if (!canView(b)) return `<div class="narrow">${emptyState('Sign in or look up this booking with its confirmation number to see it.', '<a class="btn btn-primary btn-small" href="#/manage">Look up a booking</a>')}</div>`;
   const svc = svcById(b.serviceId), st = stById(b.stylistId), c = clById(b.clientId);
   const up = upcomingActive(b);
-  const li = lateInfo(b);
+  const warn = up ? feeWarning(b) : '';
   let actions = '';
   if (up) {
     actions = `<div class="btn-row">
@@ -753,14 +796,14 @@ function pageAppointment(id) {
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>Length</dt><dd>${durLabel(svc.dur)}</dd></div>
         <div><dt>Price</dt><dd>${priceLabel(svc)}</dd></div>
-        <div><dt>Deposit</dt><dd>${depositText(b)}</dd></div>
+        <div><dt>Upfront payment</dt><dd>${depositText(b)}</dd></div>
         <div><dt>Booked for</dt><dd>${esc(c ? c.name : '')}</dd></div>
       </dl>
-      ${b.lateNotice ? `<div class="alert info">You told us you're running about ${b.lateNotice.minutes} minutes late. Thanks for the heads up.</div>` : ''}
-      ${b.status === 'cancelled' ? `<div class="alert ${b.lateCancel ? 'warn' : 'info'}">Cancelled${b.cancelReason ? ` (${esc(b.cancelReason)})` : ''}.${b.fee ? ` Late cancellation fee: ${money(b.fee.amount)}, ${b.fee.status}.` : ''}</div>` : ''}
-      ${up && li.late ? `<div class="alert warn">This appointment is less than ${state.settings.cancelWindowHours} hours away. Cancelling now may mean a ${money(li.fee)} fee.</div>` : ''}
+      ${b.lateNotice ? `<div class="alert info">You told us you're running about ${b.lateNotice.minutes} minutes late. Thanks for the heads up. Late arrivals are ${money(state.settings.lateFeePerMin)} a minute, and if we can't fit you in we may need to reschedule.</div>` : ''}
+      ${b.status === 'cancelled' ? `<div class="alert ${b.lateCancel ? 'warn' : 'info'}">Cancelled${b.cancelReason ? ` (${esc(b.cancelReason)})` : ''}.${b.fee ? ` Charge: ${money(b.fee.amount)} (${esc(b.fee.reason)}), ${esc(b.fee.status)}.` : ''}</div>` : ''}
+      ${warn ? `<div class="alert warn">${warn}</div>` : ''}${up ? '<p class="muted small">Need to reschedule? The earlier you let us know, the more we can work with you.</p>' : ''}
       ${actions}
-      ${up ? `<form class="form note-form" data-form="client-note" data-id="${b.id}">
+      ${up ? `<form novalidate class="form note-form" data-form="client-note" data-id="${b.id}">
         <label class="field"><span>Note for your stylist</span><textarea name="notes" rows="2" placeholder="e.g. bringing a photo, want to go shorter">${esc(b.notes)}</textarea></label>
         <button type="submit" class="btn btn-secondary btn-small">Save note</button></form>` : ''}
     </div>
@@ -778,7 +821,7 @@ function pageReschedule(id, q) {
   const opts = { ignoreId: b.id, staff: isStaff() };
   const elig = state.stylists.filter(st => canDo(st, svc.id));
   let h = `<div class="narrow-wide"><p><a class="link" href="${isStaff() ? '#/staff/booking/' + b.id : '#/appointment/' + b.id}">← Back to booking</a></p>
-    <div class="page-head"><h1>Reschedule</h1><p class="muted">Now: ${esc(describe(b))}</p></div>
+    <div class="page-head"><h1>Reschedule</h1><p class="muted">Now: ${esc(describe(b))}</p></div>${feeWarning(b) ? `<div class="alert warn">${feeWarning(b)}</div>` : ''}
     <div class="card"><h2 class="h3">Stylist</h2><div class="chips">
       ${[...elig.map(st => [st.id, st.name + (st.id === b.stylistId ? ' (current)' : '')]), ['any', 'Any available']].map(([v, l]) =>
         `<a class="chip ${p.stylist === v ? 'is-selected' : ''}" href="${base}${qs({ stylist: v })}">${esc(l)}</a>`).join('')}</div>
@@ -812,8 +855,8 @@ function pageAccount() {
       <section class="card"><div class="section-head"><h2 class="h3">Upcoming</h2><a class="btn btn-primary btn-small" href="#/book">Book</a></div>
         ${up.length ? `<ul class="appt-list">${up.map(card).join('')}</ul>` : emptyState('No upcoming appointments.')}</section>
       <section class="card"><h2 class="h3">Your details</h2>
-        <form class="form" data-form="client-profile">
-          <label class="field"><span>Name</span><input name="name" value="${esc(c.name)}" required></label>
+        <form novalidate class="form" data-form="client-profile">
+          <label class="field"><span>Name</span><input name="name" value="${esc(c.name)}"></label>
           <label class="field"><span>Email</span><input name="email" value="${esc(c.email)}" readonly></label>
           <label class="field"><span>Mobile phone</span><input name="phone" value="${esc(c.phone)}"></label>
           <button type="submit" class="btn btn-secondary btn-small">Save details</button></form></section>
@@ -828,13 +871,13 @@ function pageWaitlist(q) {
   const svcId = q.get('service') || '', stSel = q.get('stylist') || 'any', date = q.get('date') || dKey(addDays(today0(), 1));
   return `<div class="narrow">
     <div class="page-head"><h1>Join the waitlist</h1><p class="muted">If a spot opens up, we'll text you first.</p></div>
-    <form class="form card" data-form="waitlist">
-      <label class="field"><span>Service</span><select name="service" required>${SERVICES.map(s => `<option value="${s.id}" ${s.id === svcId ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></label>
+    <form novalidate class="form card" data-form="waitlist">
+      <label class="field"><span>Service</span><select name="service">${SERVICES.map(s => `<option value="${s.id}" ${s.id === svcId ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></label>
       <label class="field"><span>Stylist</span><select name="stylist"><option value="any">Any stylist</option>${state.stylists.map(st => `<option value="${st.id}" ${st.id === stSel ? 'selected' : ''}>${esc(st.name)}</option>`).join('')}</select></label>
-      <label class="field"><span>Date you want</span><input type="date" name="date" value="${date}" min="${dKey(today0())}" required></label>
+      <label class="field"><span>Date you want</span><input type="date" name="date" value="${date}" min="${dKey(today0())}"></label>
       <label class="field"><span>Best time</span><select name="timePref"><option>Any time</option><option>Morning (before noon)</option><option>Afternoon (noon to 5 PM)</option><option>Evening (after 5 PM)</option></select></label>
-      <label class="field"><span>Full name</span><input name="name" required value="${esc(c ? c.name : '')}"></label>
-      <label class="field"><span>Email</span><input name="email" type="email" required value="${esc(c ? c.email : '')}" ${c ? 'readonly' : ''}></label>
+      <label class="field"><span>Full name</span><input name="name" value="${esc(c ? c.name : '')}"></label>
+      <label class="field"><span>Email</span><input name="email" type="email" value="${esc(c ? c.email : '')}" ${c ? 'readonly' : ''}></label>
       <label class="field"><span>Mobile phone</span><input name="phone" type="tel" value="${esc(c ? c.phone : '')}"></label>
       <button type="submit" class="btn btn-primary">Join the waitlist</button>
     </form></div>`;
@@ -843,34 +886,38 @@ function pageWaitlist(q) {
 function pagePolicies() {
   const s = state.settings;
   return `<div class="narrow prose">
-    <div class="page-head"><h1>Salon policies</h1><p class="muted">The short version, so there are no surprises.</p></div>
-    <div class="card"><h2 class="h3">Changing or cancelling</h2><ul>
-      <li>Change or cancel at least <b>${s.cancelWindowHours} hours</b> before your appointment at no charge.</li>
-      <li>Inside ${s.cancelWindowHours} hours, a fee of <b>${s.lateFeePct}% of the service price</b> may apply.</li>
-      <li>You can reschedule or cancel online any time with your confirmation number.</li></ul></div>
-    <div class="card"><h2 class="h3">Deposits</h2><ul>
-      <li>Services ${money(s.depositMin)} and up need a <b>${s.depositPct}% deposit</b> when you book.</li>
-      <li>Your deposit goes toward your service on the day.</li>
-      <li>Cancel with ${s.cancelWindowHours} hours' notice and we refund it in full. Late cancellations and no-shows keep the deposit.</li></ul></div>
+    <div class="page-head"><h1>Booking policies</h1><p class="muted">Need to reschedule? The earlier you let us know, the more we can work with you.</p></div>
+    <div class="card"><h2 class="h3">Changes and cancellations</h2><ul>
+      <li>More than 48 hours before your appointment: <b>no charge</b>.</li>
+      <li>Within 48 hours: <b>${money(s.fee48)}</b>. Within 24 hours: <b>${money(s.fee24)}</b>.</li>
+      <li>Moving an appointment counts as a change. Charges go to the card on file.</li>
+      <li>Change or cancel online any time with your confirmation number.</li></ul></div>
+    <div class="card"><h2 class="h3">No-shows</h2><ul><li>A missed appointment is <b>${money(s.noShowFee)}</b>.</li></ul></div>
+    <div class="card"><h2 class="h3">Upfront payments</h2><ul>
+      <li>Appointments ${s.upfrontMinutes / 60}+ hours may require an upfront payment to hold your chair. It's charged to the card on file.</li>
+      <li>It applies to your final balance on appointment day.</li>
+      <li>Prepayments are nonrefundable. Cancel, change or miss the appointment within 48 hours and we keep it instead of the ${money(s.fee48)} or ${money(s.fee24)} charge, never both.</li>
+      <li>Move it more than 48 hours ahead and the payment moves with you.</li></ul></div>
     <div class="card"><h2 class="h3">Running late</h2><ul>
-      <li>We hold your spot for <b>${s.graceMinutes} minutes</b>. Let us know online or by text if you're running behind.</li>
-      <li>After that, we may need to shorten the service or move you to a new time.</li></ul></div>
-    <div class="card"><h2 class="h3">Not happy with your service?</h2><ul>
-      <li>Tell us within 7 days and we'll fix it at no charge.</li>
-      <li>Product returns are accepted unopened within 14 days.</li></ul></div>
-    <p class="muted small">Demo policies for a class. Not Willow &amp; Jade's real terms.</p></div>`;
+      <li>Late arrivals are <b>${money(s.lateFeePerMin)} a minute</b>.</li>
+      <li>Running late? If we can't fit you in, we may need to reschedule.</li></ul></div>
+    <div class="card"><h2 class="h3">Card on file</h2><ul><li>Every appointment is held with a card on file. <span class="muted">(Demo: no card is collected.)</span></li></ul></div>
+    <div class="card"><h2 class="h3">Our guarantee</h2><ul>
+      <li>Not quite right? Reach out within <b>${s.guaranteeHours} hours</b> and book your touch-up within a week, with your original stylist, at no extra charge.</li>
+      <li>It covers adjustments to the look agreed at your consultation. It doesn't cover a change of mind or a different look, and there are no refunds.</li></ul></div>
+    <p class="muted small">Class demo. These policies match the Willow &amp; Jade knowledge base files.</p></div>`;
 }
 
 function pageLogin(q) {
   const next = q.get('next') || '';
   return `<div class="narrow">
     <div class="page-head"><h1>Sign in</h1><p class="muted">Clients see their appointments. Staff go to the Velora front desk portal.</p></div>
-    <form class="form card" data-form="login" data-next="${esc(next)}">
-      <label class="field"><span>Email</span><input id="login-email" name="email" type="email" autocomplete="username" required></label>
-      <label class="field"><span>Password</span><input id="login-password" name="password" type="password" autocomplete="current-password" required></label>
+    <form novalidate class="form card" data-form="login" data-next="${esc(next)}">
+      <label class="field"><span>Email</span><input id="login-email" name="email" type="email" autocomplete="username" placeholder="agent@willowandjade.example"></label>
+      <label class="field"><span>Password (optional in this demo)</span><input id="login-password" name="password" type="password" autocomplete="current-password"></label>
       <button type="submit" class="btn btn-primary" id="login-submit">Sign in</button>
     </form>
-    <div class="card demo-accounts"><h2 class="h3">Demo accounts</h2><p class="muted small">This is a demo. Only these made-up accounts work.</p>
+    <div class="card demo-accounts"><h2 class="h3">Demo accounts</h2><p class="muted small">This is a demo. The password is optional, and an empty form signs you in as the AI Front Desk Agent.</p>
       <table class="table"><thead><tr><th>Role</th><th>Email</th><th>Password</th><th></th></tr></thead><tbody>
       ${ACCOUNTS.map(a => `<tr><td>${a.role === 'staff' ? esc(a.name) : 'Client (Maya)'}</td><td><code>${a.email}</code></td><td><code>${a.password}</code></td><td><button type="button" class="btn btn-ghost btn-small" data-action="fill-login" data-email="${a.email}" data-password="${a.password}">Use</button></td></tr>`).join('')}
       </tbody></table></div></div>`;
@@ -881,7 +928,7 @@ function notFound() { return `<div class="narrow">${emptyState('We couldn’t fi
 /* ---------------- staff pages ---------------- */
 function staffShell(inner, active) {
   const s = session();
-  const items = [['dashboard', 'Dashboard'], ['calendar', 'Calendar'], ['bookings', 'Bookings'], ['clients', 'Clients'], ['availability', 'Availability'], ['waitlist', 'Waitlist'], ['activity', 'Activity log'], ['settings', 'Settings']];
+  const items = [['dashboard', 'Dashboard'], ['calendar', 'Calendar'], ['openings', 'Find openings'], ['bookings', 'Bookings'], ['clients', 'Clients'], ['availability', 'Availability'], ['waitlist', 'Waitlist'], ['activity', 'Activity log'], ['settings', 'Settings']];
   const wlOpen = state.waitlist.filter(w => w.status === 'open').length;
   return `<div class="staff">
     <header class="staff-top"><span class="velora light">${LOGO}<span>Velora</span><span class="velora-tag">Salon Suite</span></span>
@@ -902,7 +949,7 @@ function staffDashboard() {
   const todays = state.bookings.filter(b => b.start.startsWith(tk) && b.status !== 'cancelled').sort((a, b) => a.start.localeCompare(b.start));
   const in48 = new Date(Date.now() + 48 * 36e5);
   const unconfirmed = state.bookings.filter(b => b.status === 'booked' && parseDT(b.start) > new Date() && parseDT(b.start) < in48).sort((a, b) => a.start.localeCompare(b.start));
-  const fees = state.bookings.filter(b => b.fee && b.fee.status === 'pending');
+  const fees = state.bookings.filter(b => (b.fee && b.fee.status === 'waiver requested') || (b.deposit && b.deposit.status === 'refund requested'));
   const late = state.bookings.filter(b => b.lateNotice && b.start.startsWith(tk));
   const wl = state.waitlist.filter(w => w.status === 'open');
   const weekStart = addDays(today0(), -6);
@@ -917,7 +964,7 @@ function staffDashboard() {
   };
   const attn = [];
   late.forEach(b => attn.push(`<li><span class="tag warn">Running late</span> ${esc(clById(b.clientId).name)} is about ${b.lateNotice.minutes} min late for ${fmtTime(parseDT(b.start))}. <a class="link" href="#/staff/booking/${b.id}">Open</a></li>`));
-  fees.forEach(b => attn.push(`<li><span class="tag warn">Late cancel</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. Fee ${money(b.fee.amount)} pending. <button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="waived">Waive</button><button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="charged">Charge</button></li>`));
+  fees.forEach(b => attn.push(`<li><span class="tag warn">Needs Kelley</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. ${b.fee && b.fee.status === 'waiver requested' ? `Waiver requested for the ${money(b.fee.amount)} charge.` : 'Refund requested for the upfront payment.'} <a class="link" href="#/staff/booking/${b.id}">Open</a></li>`));
   unconfirmed.slice(0, 5).forEach(b => attn.push(`<li><span class="tag">Unconfirmed</span> ${esc(clById(b.clientId).name)}, ${esc(describe(b))}. <button type="button" class="btn btn-ghost btn-small" data-action="set-status" data-id="${b.id}" data-status="confirmed">Mark confirmed</button></li>`));
   if (unconfirmed.length > 5) attn.push(`<li><a class="link" href="#/staff/bookings${qs({ status: 'booked' })}">See all ${unconfirmed.length} unconfirmed bookings</a></li>`);
   if (wl.length) attn.push(`<li><span class="tag">Waitlist</span> ${wl.length} client${wl.length > 1 ? 's' : ''} waiting for a spot. <a class="link" href="#/staff/waitlist">See waitlist</a></li>`);
@@ -973,6 +1020,46 @@ function staffCalendar(q) {
     <div class="cal card"><div class="cal-times"><div class="cal-colhead"></div><div class="cal-colbody" style="height:${rows * rowH}px">${times.join('')}</div></div><div class="cal-cols">${cols}</div></div>`;
 }
 
+function staffOpenings(q) {
+  const t0 = dKey(today0());
+  const svc = svcById(q.get('service')) || svcById('haircut-blowout');
+  const stylist = q.get('stylist') && (q.get('stylist') === 'any' || stById(q.get('stylist'))) ? q.get('stylist') : 'any';
+  let date = q.get('date') || t0;
+  if (date < t0) date = t0;
+  const groups = [...servicesByCat()].map(([cat, list]) => `<optgroup label="${esc(cat)}">${list.map(s => `<option value="${s.id}" ${s.id === svc.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</optgroup>`).join('');
+  const stList = stylist === 'any' ? state.stylists.filter(st => canDo(st, svc.id)) : [stById(stylist)];
+  const rows = stList.map(st => {
+    const slots = canDo(st, svc.id) ? slotsFor(date, svc.id, st.id, { staff: true }) : [];
+    const cell = slots.length
+      ? `<div class="slots">${slots.map(x => `<button type="button" class="slot" data-action="new-booking" data-service="${svc.id}" data-stylist="${st.id}" data-date="${date}" data-time="${x.time}" aria-label="Book ${esc(svc.name)} with ${esc(st.name)} at ${fmtT(x.time)}">${fmtT(x.time)}</button>`).join('')}</div>`
+      : `<span class="muted">${!canDo(st, svc.id) ? 'Doesn’t offer this service' : windowFor(st, date) ? 'Fully booked' : 'Not working'}</span>`;
+    return `<tr><td class="nowrap">${stDot(st)} ${esc(st.name)}<div class="muted small">${esc(st.title)}</div></td><td>${cell}</td></tr>`;
+  }).join('');
+  const week = [];
+  for (let i = 0; i < 7; i++) {
+    const k = dKey(addDays(parseDT(date), i));
+    const n = slotsFor(k, svc.id, stylist, { staff: true }).length;
+    week.push(`<a class="chip ${k === date ? 'is-selected' : ''}" href="#/staff/openings${qs({ service: svc.id, stylist, date: k })}">${fmtDay(parseDT(k))}: ${SALON.hours[parseDT(k).getDay()] ? `${n} open` : 'closed'}</a>`);
+  }
+  const open = !!SALON.hours[parseDT(date).getDay()];
+  return `<div class="page-head"><h1>Find openings</h1><p class="muted">Check open start times for any service, stylist and day. Click a time to book it.</p></div>
+    <form novalidate class="filters card" data-form="filter" data-base="/staff/openings">
+      <label class="field grow"><span>Service</span><select name="service" id="op-service" data-autosubmit>${groups}</select></label>
+      <label class="field"><span>Stylist</span><select name="stylist" id="op-stylist" data-autosubmit><option value="any" ${stylist === 'any' ? 'selected' : ''}>Any stylist</option>${state.stylists.map(st => `<option value="${st.id}" ${st.id === stylist ? 'selected' : ''}>${esc(st.name)}</option>`).join('')}</select></label>
+      <label class="field"><span>Date</span><input type="date" name="date" id="op-date" value="${date}" data-autosubmit></label>
+      <button type="submit" class="btn btn-secondary">Check</button></form>
+    <div class="chips">${week.join('')}</div>
+    <div class="card"><h2 class="h3">${esc(svc.name)} · ${durLabel(svc.dur)} · ${priceLabel(svc)} · ${fmtLong(parseDT(date))}</h2>
+      ${open ? `<table class="table"><thead><tr><th>Stylist</th><th>Open start times</th></tr></thead><tbody>${rows}</tbody></table>` : emptyState('The salon is closed that day. Monday is education day.')}</div>`;
+}
+
+function staffRef(ref) {
+  const want = String(ref || '').toUpperCase().replace(/^WJ(\d)/, 'WJ-$1');
+  const b = state.bookings.find(x => x.ref.toUpperCase() === want);
+  if (b) { go('/staff/booking/' + b.id); return ''; }
+  return emptyState(`No booking with confirmation number ${esc(want)}.`, `<a class="btn btn-secondary btn-small" href="#/staff/bookings${qs({ view: 'all', q: want })}">Search bookings</a>`);
+}
+
 function staffBookings(q) {
   const view = q.get('view') || 'upcoming', status = q.get('status') || '', stf = q.get('stylist') || '', term = (q.get('q') || '').trim().toLowerCase();
   const now = new Date();
@@ -985,14 +1072,14 @@ function staffBookings(q) {
   list.sort((a, b) => (view === 'past' ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start)));
   const shown = list.slice(0, 200);
   return `<div class="page-head row"><div><h1>Bookings</h1><p class="muted">${list.length} match${list.length === 1 ? '' : 'es'}</p></div><button type="button" class="btn btn-primary" data-action="new-booking">+ New booking</button></div>
-    <form class="filters card" data-form="filter" data-base="/staff/bookings">
+    <form novalidate class="filters card" data-form="filter" data-base="/staff/bookings">
       <label class="field"><span>Show</span><select name="view" data-autosubmit>${[['upcoming', 'Upcoming'], ['past', 'Past'], ['all', 'All']].map(([v, l]) => `<option value="${v}" ${v === view ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label class="field"><span>Status</span><select name="status" data-autosubmit><option value="">Any status</option>${Object.entries(STATUS).map(([v, l]) => `<option value="${v}" ${v === status ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
       <label class="field"><span>Stylist</span><select name="stylist" data-autosubmit><option value="">Any stylist</option>${state.stylists.map(st => `<option value="${st.id}" ${st.id === stf ? 'selected' : ''}>${esc(st.name)}</option>`).join('')}</select></label>
       <label class="field grow"><span>Search</span><input name="q" value="${esc(q.get('q') || '')}" placeholder="Name, email, service or WJ- number"></label>
       <button type="submit" class="btn btn-secondary">Search</button></form>
     <div class="card">${shown.length ? `<table class="table"><thead><tr><th>Ref</th><th>When</th><th>Client</th><th>Service</th><th>Stylist</th><th>Status</th><th>Source</th></tr></thead><tbody>
-      ${shown.map(b => { const c = clById(b.clientId), st = stById(b.stylistId); return `<tr><td><a class="link" href="#/staff/booking/${b.id}">${b.ref}</a></td><td class="nowrap">${fmtShortWhen(b.start)}</td><td>${esc(c.name)}</td><td>${esc(svcById(b.serviceId).name)}</td><td>${stDot(st)} ${esc(st.name)}</td><td>${pill(b.status)}${b.fee && b.fee.status === 'pending' ? ' <span class="tag warn">Fee</span>' : ''}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join('')}
+      ${shown.map(b => { const c = clById(b.clientId), st = stById(b.stylistId); return `<tr><td><a class="link" href="#/staff/booking/${b.id}">${b.ref}</a></td><td class="nowrap">${fmtShortWhen(b.start)}</td><td>${esc(c.name)}</td><td>${esc(svcById(b.serviceId).name)}</td><td>${stDot(st)} ${esc(st.name)}</td><td>${pill(b.status)}${b.fee ? ` <span class="tag warn">${money(b.fee.amount)} charge</span>` : ''}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join('')}
       </tbody></table>${list.length > shown.length ? `<p class="muted small">Showing the first ${shown.length}. Narrow the filters to see more.</p>` : ''}` : emptyState('No bookings match those filters.')}</div>`;
 }
 
@@ -1000,8 +1087,8 @@ function timeFields({ service, stylist, date, current }) {
   const groups = [...servicesByCat()].map(([cat, list]) => `<optgroup label="${esc(cat)}">${list.map(s => `<option value="${s.id}" ${s.id === service ? 'selected' : ''}>${esc(s.name)} · ${durLabel(s.dur)} · ${priceLabel(s)}</option>`).join('')}</optgroup>`).join('');
   return `<label class="field"><span>Service</span><select name="service" data-recalc-field>${groups}</select></label>
     <label class="field"><span>Stylist</span><select name="stylist" data-recalc-field><option value="any" ${stylist === 'any' ? 'selected' : ''}>Any available</option>${state.stylists.map(st => `<option value="${st.id}" ${st.id === stylist ? 'selected' : ''}>${esc(st.name)}</option>`).join('')}</select></label>
-    <label class="field"><span>Date</span><input type="date" name="date" value="${date}" min="${dKey(today0())}" required data-recalc-field></label>
-    <label class="field"><span>Time</span><select name="time" required data-current="${current || ''}"></select><small class="muted" data-slot-hint></small></label>`;
+    <label class="field"><span>Date</span><input type="date" name="date" value="${date}" min="${dKey(today0())}" data-recalc-field></label>
+    <label class="field"><span>Time</span><select name="time" data-current="${current || ''}"></select><small class="muted" data-slot-hint></small></label>`;
 }
 
 function fillTimes(f) {
@@ -1037,8 +1124,8 @@ function staffBooking(id) {
   const dep = b.deposit;
   return `<p><a class="link" href="#/staff/bookings">← All bookings</a></p>
     <div class="page-head row"><div><p class="eyebrow">Booking ${b.ref}</p><h1>${esc(c.name)} · ${esc(svc.name)}</h1><p class="muted">${fmtWhen(b.start)} with ${esc(st.name)}</p></div>${pill(b.status)}</div>
-    ${b.lateNotice ? `<div class="alert warn">Client says they're running about ${b.lateNotice.minutes} minutes late (sent ${fmtStamp(b.lateNotice.at)}). <button type="button" class="btn btn-ghost btn-small" data-action="clear-late" data-id="${b.id}">Clear</button></div>` : ''}
-    ${b.fee ? `<div class="alert ${b.fee.status === 'pending' ? 'warn' : 'info'}">Late cancellation fee ${money(b.fee.amount)}: <b>${b.fee.status}</b>. ${b.fee.status === 'pending' ? `<button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="waived">Waive fee</button><button type="button" class="btn btn-ghost btn-small" data-action="fee" data-id="${b.id}" data-to="charged">Charge fee (demo)</button>` : ''}</div>` : ''}
+    ${b.lateNotice ? `<div class="alert warn">Client says they're running about ${b.lateNotice.minutes} minutes late (sent ${fmtStamp(b.lateNotice.at)}). Late fee about ${money(b.lateNotice.minutes * state.settings.lateFeePerMin)}. The stylist decides if the service still fits. <button type="button" class="btn btn-ghost btn-small" data-action="clear-late" data-id="${b.id}">Clear</button></div>` : ''}
+    ${b.fee ? `<div class="alert ${['charged', 'waiver requested'].includes(b.fee.status) ? 'warn' : 'info'}">${money(b.fee.amount)} charge (${esc(b.fee.reason)}): <b>${esc(b.fee.status)}</b>. ${feeButtons(b)}</div>` : ''}
     <div class="btn-row">${actions.join('')}</div>
     <div class="grid-2">
       <section class="card"><h2 class="h3">Details</h2><dl class="details">
@@ -1047,16 +1134,16 @@ function staffBooking(id) {
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>When</dt><dd>${fmtWhen(b.start)} to ${fmtTime(parseDT(b.end))}</dd></div>
         <div><dt>Booked via</dt><dd>${esc(b.source)} · ${fmtStamp(b.createdAt)}</dd></div>
-        <div><dt>Deposit</dt><dd>${depositText(b)}${dep && ['held', 'kept toward fee', 'forfeited'].includes(dep.status) ? ` <button type="button" class="btn btn-ghost btn-small" data-action="deposit" data-id="${b.id}" data-to="refunded">Refund deposit</button>` : ''}</dd></div>
+        <div><dt>Upfront payment</dt><dd>${depositText(b)} ${depButtons(b)}</dd></div>
         ${b.cancelReason ? `<div><dt>Cancel reason</dt><dd>${esc(b.cancelReason)}${b.lateCancel ? ' · late cancellation' : ''}</dd></div>` : ''}
         ${b.notes ? `<div><dt>Client note</dt><dd>${esc(b.notes)}</dd></div>` : ''}
         ${c.notes ? `<div><dt>Client profile note</dt><dd>${esc(c.notes)}</dd></div>` : ''}
       </dl></section>
       <section class="card"><h2 class="h3">${editable ? 'Change service, stylist or time' : 'Change booking'}</h2>
-        ${editable ? `<form class="form" data-form="staff-edit" data-id="${b.id}" data-ignore="${b.id}" data-recalc>
+        ${editable ? `<form novalidate class="form" data-form="staff-edit" data-id="${b.id}" data-ignore="${b.id}" data-recalc>
           ${timeFields({ service: b.serviceId, stylist: b.stylistId, date: b.start.slice(0, 10), current: b.start.slice(11) })}
           <button type="submit" class="btn btn-primary btn-small">Save changes</button></form>` : '<p class="muted">Only upcoming booked or confirmed appointments can be changed. Restore a cancelled booking first, or make a new one.</p>'}
-        <form class="form" data-form="staff-notes" data-id="${b.id}"><label class="field"><span>Internal note (staff only)</span><textarea name="staffNotes" rows="3">${esc(b.staffNotes)}</textarea></label><button type="submit" class="btn btn-secondary btn-small">Save note</button></form>
+        <form novalidate class="form" data-form="staff-notes" data-id="${b.id}"><label class="field"><span>Internal note (staff only)</span><textarea name="staffNotes" rows="3">${esc(b.staffNotes)}</textarea></label><button type="submit" class="btn btn-secondary btn-small">Save note</button></form>
       </section>
     </div>
     <section class="card"><h2 class="h3">History</h2><ol class="timeline">${b.history.slice().reverse().map(h => `<li><span class="muted small">${fmtStamp(h.at)} · ${esc(h.actor)}</span><div>${esc(h.text)}</div></li>`).join('')}</ol></section>`;
@@ -1068,7 +1155,7 @@ function staffClients(q) {
   let list = state.clients.slice().sort((a, b) => a.name.localeCompare(b.name));
   if (term) list = list.filter(c => c.name.toLowerCase().includes(term) || c.email.toLowerCase().includes(term) || c.phone.includes(term));
   return `<div class="page-head row"><div><h1>Clients</h1><p class="muted">${state.clients.length} clients</p></div><button type="button" class="btn btn-primary" data-action="new-client">+ New client</button></div>
-    <form class="filters card" data-form="filter" data-base="/staff/clients"><label class="field grow"><span>Search</span><input name="q" value="${esc(q.get('q') || '')}" placeholder="Name, email or phone"></label><button type="submit" class="btn btn-secondary">Search</button></form>
+    <form novalidate class="filters card" data-form="filter" data-base="/staff/clients"><label class="field grow"><span>Search</span><input name="q" value="${esc(q.get('q') || '')}" placeholder="Name, email or phone"></label><button type="submit" class="btn btn-secondary">Search</button></form>
     <div class="card"><table class="table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Next visit</th><th>Visits</th></tr></thead><tbody>
     ${list.map(c => { const mine = state.bookings.filter(b => b.clientId === c.id); const next = mine.filter(b => ['booked', 'confirmed'].includes(b.status) && parseDT(b.start) > now).sort((a, b) => a.start.localeCompare(b.start))[0]; const visits = mine.filter(b => b.status === 'completed').length;
       return `<tr><td><a class="link" href="#/staff/client/${c.id}">${esc(c.name)}</a></td><td>${esc(c.email)}</td><td class="nowrap">${esc(c.phone)}</td><td class="nowrap">${next ? fmtShortWhen(next.start) : '<span class="muted">None</span>'}</td><td>${visits}</td></tr>`; }).join('')}
@@ -1089,9 +1176,9 @@ function staffClient(id) {
       <button type="button" class="btn btn-primary" data-action="new-booking" data-client="${c.id}">+ Book for ${esc(firstName(c.name))}</button></div>
     <div class="grid-2 wide-left">
       <section class="card"><h2 class="h3">Upcoming</h2>${tbl(up)}<h2 class="h3">Past and cancelled</h2>${tbl(past)}</section>
-      <section class="card"><h2 class="h3">Contact and notes</h2><form class="form" data-form="client-edit" data-id="${c.id}">
-        <label class="field"><span>Name</span><input name="name" value="${esc(c.name)}" required></label>
-        <label class="field"><span>Email</span><input name="email" type="email" value="${esc(c.email)}" required></label>
+      <section class="card"><h2 class="h3">Contact and notes</h2><form novalidate class="form" data-form="client-edit" data-id="${c.id}">
+        <label class="field"><span>Name</span><input name="name" value="${esc(c.name)}"></label>
+        <label class="field"><span>Email</span><input name="email" type="email" value="${esc(c.email)}"></label>
         <label class="field"><span>Phone</span><input name="phone" value="${esc(c.phone)}"></label>
         <label class="field"><span>Notes (allergies, preferences)</span><textarea name="notes" rows="4">${esc(c.notes)}</textarea></label>
         <button type="submit" class="btn btn-secondary btn-small">Save client</button></form></section>
@@ -1101,18 +1188,18 @@ function staffClient(id) {
 function staffAvailability() {
   const order = WEEK_ORDER;
   const stCards = state.stylists.map(st => `<section class="card"><h2 class="h3">${stDot(st)} ${esc(st.name)} <span class="muted small">${esc(st.title)}</span></h2>
-    <form class="form" data-form="hours" data-id="${st.id}"><table class="table hours"><thead><tr><th>Day</th><th>Working</th><th>Start</th><th>End</th></tr></thead><tbody>
+    <form novalidate class="form" data-form="hours" data-id="${st.id}"><table class="table hours"><thead><tr><th>Day</th><th>Working</th><th>Start</th><th>End</th></tr></thead><tbody>
     ${order.map(d => { const h = st.hours[d], salonOpen = !!SALON.hours[d]; return `<tr class="${salonOpen ? '' : 'muted'}"><td>${DAYS[d]}</td>
       <td><input type="checkbox" name="on-${d}" ${h && salonOpen ? 'checked' : ''} ${salonOpen ? '' : 'disabled'} aria-label="${esc(st.name)} works ${DAYS[d]}"></td>
       <td><input type="time" name="start-${d}" value="${h ? h[0] : (SALON.hours[d] || ['09:00'])[0]}" step="900" ${salonOpen ? '' : 'disabled'} aria-label="${DAYS[d]} start"></td>
       <td><input type="time" name="end-${d}" value="${h ? h[1] : (SALON.hours[d] || ['09:00', '17:00'])[1]}" step="900" ${salonOpen ? '' : 'disabled'} aria-label="${DAYS[d]} end"></td></tr>`; }).join('')}
-    </tbody></table><p class="muted small">Salon is closed Sunday and Monday.</p><button type="submit" class="btn btn-secondary btn-small">Save ${esc(st.name)}'s hours</button></form></section>`).join('');
+    </tbody></table><p class="muted small">Salon is closed Monday (education day).</p><button type="submit" class="btn btn-secondary btn-small">Save ${esc(st.name)}'s hours</button></form></section>`).join('');
   const tk = dKey(today0());
   const blocks = state.blocks.filter(k => k.date >= tk).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
   return `<div class="page-head"><h1>Availability</h1><p class="muted">Working hours and time off control what clients can book online.</p></div>
-    <section class="card"><h2 class="h3">Block time off</h2><form class="form form-inline" data-form="block-add">
+    <section class="card"><h2 class="h3">Block time off</h2><form novalidate class="form form-inline" data-form="block-add">
       <label class="field"><span>Stylist</span><select name="stylistId">${state.stylists.map(st => `<option value="${st.id}">${esc(st.name)}</option>`).join('')}</select></label>
-      <label class="field"><span>Date</span><input type="date" name="date" value="${dKey(addDays(today0(), 1))}" min="${tk}" required></label>
+      <label class="field"><span>Date</span><input type="date" name="date" value="${dKey(addDays(today0(), 1))}" min="${tk}"></label>
       <label class="field"><span>From</span><input type="time" name="start" value="12:00" step="900"></label>
       <label class="field"><span>To</span><input type="time" name="end" value="13:00" step="900"></label>
       <label class="check"><input type="checkbox" name="allDay" aria-label="Block the whole day"> <span>All day</span></label>
@@ -1140,19 +1227,20 @@ function staffActivity(q) {
   const actors = [...new Set(state.activity.map(a => a.actor))].sort();
   const list = state.activity.filter(a => !who || a.actor === who);
   return `<div class="page-head"><h1>Activity log</h1><p class="muted">Every change, who made it and when. Useful for checking what an AI agent did.</p></div>
-    <form class="filters card" data-form="filter" data-base="/staff/activity"><label class="field"><span>Who</span><select name="actor" data-autosubmit><option value="">Everyone</option>${actors.map(a => `<option ${a === who ? 'selected' : ''}>${esc(a)}</option>`).join('')}</select></label></form>
+    <form novalidate class="filters card" data-form="filter" data-base="/staff/activity"><label class="field"><span>Who</span><select name="actor" data-autosubmit><option value="">Everyone</option>${actors.map(a => `<option ${a === who ? 'selected' : ''}>${esc(a)}</option>`).join('')}</select></label></form>
     <div class="card">${list.length ? `<table class="table"><thead><tr><th>When</th><th>Who</th><th>What happened</th><th>Booking</th></tr></thead><tbody>${list.map(a => `<tr><td class="nowrap muted">${fmtStamp(a.at)}</td><td>${esc(a.actor)}</td><td>${esc(a.action)}</td><td>${a.bookingId && bkById(a.bookingId) ? `<a class="link" href="#/staff/booking/${a.bookingId}">${a.ref}</a>` : esc(a.ref)}</td></tr>`).join('')}</tbody></table>` : emptyState('No activity yet.')}</div>`;
 }
 
 function staffSettings() {
   const s = state.settings;
   return `<div class="page-head"><h1>Settings</h1><p class="muted">Booking rules for Willow &amp; Jade.</p></div>
-    <section class="card"><h2 class="h3">Cancellation and deposits</h2><form class="form form-inline" data-form="settings">
-      <label class="field"><span>Free cancellation window (hours)</span><input type="number" name="cancelWindowHours" min="0" max="168" value="${s.cancelWindowHours}"></label>
-      <label class="field"><span>Late cancellation fee (%)</span><input type="number" name="lateFeePct" min="0" max="100" value="${s.lateFeePct}"></label>
-      <label class="field"><span>Deposit needed from ($)</span><input type="number" name="depositMin" min="0" value="${s.depositMin}"></label>
-      <label class="field"><span>Deposit (%)</span><input type="number" name="depositPct" min="0" max="100" value="${s.depositPct}"></label>
-      <label class="field"><span>Late arrival grace (minutes)</span><input type="number" name="graceMinutes" min="0" max="60" value="${s.graceMinutes}"></label>
+    <section class="card"><h2 class="h3">Fees and upfront payments</h2><form novalidate class="form form-inline" data-form="settings">
+      <label class="field"><span>Change fee within 48 hours ($)</span><input type="number" name="fee48" min="0" value="${s.fee48}"></label>
+      <label class="field"><span>Change fee within 24 hours ($)</span><input type="number" name="fee24" min="0" value="${s.fee24}"></label>
+      <label class="field"><span>No-show fee ($)</span><input type="number" name="noShowFee" min="0" value="${s.noShowFee}"></label>
+      <label class="field"><span>Upfront payment from (minutes)</span><input type="number" name="upfrontMinutes" min="0" value="${s.upfrontMinutes}"></label>
+      <label class="field"><span>Late arrival fee ($ a minute)</span><input type="number" name="lateFeePerMin" min="0" value="${s.lateFeePerMin}"></label>
+      <label class="field"><span>Guarantee window (hours)</span><input type="number" name="guaranteeHours" min="0" value="${s.guaranteeHours}"></label>
       <button type="submit" class="btn btn-primary">Save settings</button></form></section>
     <section class="card"><h2 class="h3">Demo data</h2><p class="muted">Bookings live in this browser only. Reset to start the demo fresh, with appointments rebuilt around today's date.</p>
       <div class="btn-row"><button type="button" class="btn btn-danger" data-action="reset-demo">Reset demo data</button><button type="button" class="btn btn-ghost" data-action="export">Download data (JSON)</button></div></section>`;
@@ -1178,10 +1266,10 @@ function newBookingModal(d = {}) {
   const presetSt = d.stylist && d.stylist !== 'any' ? stById(d.stylist) : null;
   const service = d.service || (presetSt && !canDo(presetSt, 'haircut-blowout') ? SERVICES.find(s => canDo(presetSt, s.id)).id : 'haircut-blowout');
   openModal(`<h2>New booking</h2>
-    <form class="form" data-form="staff-new" data-recalc data-waitlist="${d.waitlist || ''}">
+    <form novalidate class="form" data-form="staff-new" data-recalc data-waitlist="${d.waitlist || ''}">
       <label class="field"><span>Client</span><select name="clientId" data-client-select><option value="new">+ New client</option>${clients.map(c => `<option value="${c.id}" ${c.id === d.client ? 'selected' : ''}>${esc(c.name)} · ${esc(c.email)}</option>`).join('')}</select></label>
       <div class="new-client" ${d.client ? 'hidden' : ''}>
-        <label class="field"><span>New client name</span><input name="newName" ${d.client ? '' : 'required'}></label>
+        <label class="field"><span>New client name</span><input name="newName" placeholder="Walk-in client"></label>
         <label class="field"><span>Email</span><input name="newEmail" type="email"></label>
         <label class="field"><span>Phone</span><input name="newPhone" type="tel"></label></div>
       ${timeFields({ service, stylist: d.stylist || 'any', date, current: d.time || '' })}
@@ -1214,16 +1302,16 @@ const ACTIONS = {
   },
   'cancel-open': d => {
     const b = bkById(d.id); if (!b) return;
-    const { late, fee } = lateInfo(b);
+    const w = feeWarning(b);
     const staff = isStaff();
     openModal(`<h2>Cancel this appointment?</h2><p>${esc(describe(b))}</p>
-      ${late && fee ? `<div class="alert warn"><b>Late cancellation.</b> This is less than ${state.settings.cancelWindowHours} hours away, so a ${money(fee)} fee may apply.${staff ? ' You can waive it afterward.' : ''}</div>` : `<p class="muted">${b.deposit ? `The ${money(b.deposit.amount)} deposit will be refunded.` : 'No fee applies.'}</p>`}
-      <form class="form" data-form="cancel" data-id="${b.id}"><label class="field"><span>Reason</span><select name="reason" id="cancel-reason">${CANCEL_REASONS.filter(r => staff || r !== 'Salon cancelled').map(r => `<option>${r}</option>`).join('')}</select></label>
+      ${w ? `<div class="alert warn">${w}</div>` : `<p class="muted">More than 48 hours away, so there's no charge.${b.deposit ? ' The upfront payment is nonrefundable and stays with the salon.' : ''}</p>`}
+      <form novalidate class="form" data-form="cancel" data-id="${b.id}"><label class="field"><span>Reason (optional)</span><select name="reason" id="cancel-reason">${CANCEL_REASONS.filter(r => staff || r !== 'Salon cancelled').map(r => `<option>${r}</option>`).join('')}</select></label>
       <div class="modal-actions"><button type="button" class="btn btn-ghost" data-action="close-modal">Keep appointment</button><button type="submit" class="btn btn-danger">Cancel appointment</button></div></form>`);
   },
   'late-open': d => {
-    openModal(`<h2>Running late?</h2><p>We hold your spot for ${state.settings.graceMinutes} minutes. Let the salon know how late you'll be.</p>
-      <form class="form" data-form="late" data-id="${d.id}"><label class="field"><span>About how late?</span><select name="minutes"><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes or more</option></select></label>
+    openModal(`<h2>Running late?</h2><p>Let the salon know how late you'll be. Late arrivals are ${money(state.settings.lateFeePerMin)} a minute, and if we can't fit you in we may need to reschedule.</p>
+      <form novalidate class="form" data-form="late" data-id="${d.id}"><label class="field"><span>About how late?</span><select name="minutes"><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes or more</option></select></label>
       <div class="modal-actions"><button type="button" class="btn btn-ghost" data-action="close-modal">Never mind</button><button type="submit" class="btn btn-primary">Tell the salon</button></div></form>`);
   },
   'client-confirm': d => { const b = bkById(d.id); if (!b) return; setStatus(b, 'confirmed'); toast("Thanks! You're confirmed."); render(); },
@@ -1231,7 +1319,7 @@ const ACTIONS = {
     const b = bkById(d.id); if (!b) return;
     const r = moveBooking(b, { key: d.date, time: d.time, stylistId: d.stylist });
     if (r.error) { toast(r.error, 'err'); render(); return; }
-    toast(r.unchanged ? 'No change needed.' : 'Appointment moved.');
+    toast(r.unchanged ? 'No change needed.' : r.fee ? `Appointment moved. ${money(r.fee)} change charge (demo).` : r.keptDeposit ? 'Appointment moved. The upfront payment was kept.' : 'Appointment moved.');
     go(isStaff() ? `/staff/booking/${b.id}` : `/appointment/${b.id}`);
   },
   'set-status': d => { const b = bkById(d.id); if (!b) return; setStatus(b, d.status); toast(`Marked ${STATUS[d.status].toLowerCase()}.`); render(); },
@@ -1242,12 +1330,28 @@ const ACTIONS = {
     toast(`Confirmed ${list.length} booking${list.length === 1 ? '' : 's'}.`); render();
   },
   restore: d => { const b = bkById(d.id); const r = restoreBooking(b); toast(r.error || 'Booking restored.', r.error ? 'err' : 'ok'); render(); },
-  deposit: d => { const b = bkById(d.id); if (!b || !b.deposit) return; b.deposit.status = d.to; hist(b, `Deposit ${d.to}`); log(`Deposit ${money(b.deposit.amount)} ${d.to}: ${describe(b)}`, b); save(); toast(`Deposit ${d.to} (demo, no money moved).`); render(); },
-  fee: d => { const b = bkById(d.id); if (!b || !b.fee) return; b.fee.status = d.to; hist(b, `Late cancellation fee ${d.to}`); log(`Late cancellation fee ${money(b.fee.amount)} ${d.to}: ${describe(b)}`, b); save(); toast(`Fee ${d.to} (demo, no money moved).`); render(); },
+  deposit: d => {
+    const b = bkById(d.id); if (!b || !b.deposit) return;
+    let to = d.to;
+    if (isAgent() && to.startsWith('refunded')) to = 'refund requested';
+    b.deposit.status = to;
+    hist(b, `Upfront payment: ${to}`); log(`Upfront payment ${to}: ${describe(b)}`, b); save();
+    toast(to === 'refund requested' ? 'AI agents can\u2019t refund upfront payments. Sent to Kelley for approval.' : `Upfront payment ${to} (demo, no money moved).`, to === 'refund requested' ? 'err' : 'ok');
+    render();
+  },
+  fee: d => {
+    const b = bkById(d.id); if (!b || !b.fee) return;
+    let to = d.to;
+    if (isAgent() && to.startsWith('waived')) to = 'waiver requested';
+    b.fee.status = to;
+    hist(b, `${money(b.fee.amount)} charge: ${to}`); log(`${money(b.fee.amount)} charge ${to}: ${describe(b)}`, b); save();
+    toast(to === 'waiver requested' ? 'AI agents can\u2019t waive fees. Sent to Kelley for approval.' : `Charge ${to} (demo, no money moved).`, to === 'waiver requested' ? 'err' : 'ok');
+    render();
+  },
   'clear-late': d => { const b = bkById(d.id); if (!b) return; b.lateNotice = null; hist(b, 'Cleared running-late notice'); save(); render(); },
   'new-booking': d => newBookingModal(d),
-  'new-client': () => openModal(`<h2>New client</h2><form class="form" data-form="client-new">
-      <label class="field"><span>Name</span><input name="name" required></label><label class="field"><span>Email</span><input name="email" type="email" required></label>
+  'new-client': () => openModal(`<h2>New client</h2><form novalidate class="form" data-form="client-new">
+      <label class="field"><span>Name</span><input name="name"></label><label class="field"><span>Email</span><input name="email" type="email"></label>
       <label class="field"><span>Phone</span><input name="phone" type="tel"></label><label class="field"><span>Notes</span><textarea name="notes" rows="2"></textarea></label>
       <div class="modal-actions"><button type="button" class="btn btn-ghost" data-action="close-modal">Cancel</button><button type="submit" class="btn btn-primary">Add client</button></div></form>`),
   'block-remove': d => { const k = state.blocks.find(x => x.id === d.id); state.blocks = state.blocks.filter(x => x.id !== d.id); if (k) log(`Removed time off for ${stById(k.stylistId).name} on ${fmtDay(parseDT(k.date))}`); save(); toast('Time off removed.'); render(); },
@@ -1259,8 +1363,9 @@ function dl(blob, name) { const a = document.createElement('a'); a.href = URL.cr
 const FORMS = {
   login: (f, d) => {
     const email = (d.email || '').trim().toLowerCase();
-    const acct = ACCOUNTS.find(a => a.email === email && a.password === d.password);
-    if (!acct) { toast('That email and password don’t match a demo account.', 'err'); return; }
+    let acct = email ? ACCOUNTS.find(a => a.email === email) : ACCOUNTS[1];
+    if (!acct && email) { const cl = state.clients.find(c => c.email.toLowerCase() === email); if (cl) acct = { email: cl.email, role: 'client', name: cl.name }; }
+    if (!acct) { toast('Use one of the demo emails listed below.', 'err'); return; }
     setSession({ email: acct.email, role: acct.role, name: acct.name });
     toast(`Signed in as ${acct.name}.`);
     const next = f.dataset.next;
@@ -1268,12 +1373,14 @@ const FORMS = {
   },
   filter: (f, d) => { go(f.dataset.base + qs(d)); },
   'book-confirm': (f, d) => {
-    const email = (d.email || '').trim().toLowerCase();
-    if (!d.name || !d.name.trim()) { toast('Please add your name.', 'err'); return; }
-    if (!/^\S+@\S+\.\S+$/.test(email)) { toast('Please add a valid email.', 'err'); return; }
-    if (!d.agree) { toast('Please agree to the cancellation policy.', 'err'); return; }
-    let c = state.clients.find(x => x.email.toLowerCase() === email);
-    if (!c) { c = { id: uid('c'), name: d.name.trim(), email, phone: (d.phone || '').trim(), notes: '', createdAt: dKey(new Date()) }; state.clients.push(c); }
+    let email = (d.email || '').trim().toLowerCase();
+    const me = currentClient();
+    let c = me || (email ? state.clients.find(x => x.email.toLowerCase() === email) : null);
+    if (!c) {
+      if (!email) email = `guest-${Date.now().toString(36)}@example.com`;
+      c = { id: uid('c'), name: (d.name || '').trim() || 'Guest client', email, phone: (d.phone || '').trim(), notes: '', createdAt: dKey(new Date()) };
+      state.clients.push(c);
+    }
     else if (d.phone && !c.phone) c.phone = d.phone.trim();
     const r = createBooking({ clientId: c.id, serviceId: d.service, stylistId: d.stylist, key: d.date, time: d.time, source: 'Online', notes: (d.notes || '').trim() });
     if (r.error) { toast(r.error, 'err'); render(); return; }
@@ -1283,31 +1390,32 @@ const FORMS = {
   'manage-lookup': (f, d) => {
     const ref = (d.ref || '').trim().toUpperCase().replace(/^WJ(\d)/, 'WJ-$1');
     const email = (d.email || '').trim().toLowerCase();
-    const b = state.bookings.find(x => x.ref.toUpperCase() === ref && clById(x.clientId).email.toLowerCase() === email);
-    if (!b) { toast('We couldn’t find a booking with that number and email.', 'err'); return; }
+    const matches = (ref || email) ? state.bookings.filter(x => (!ref || x.ref.toUpperCase() === ref) && (!email || clById(x.clientId).email.toLowerCase() === email)) : [];
+    const b = ref ? matches[0] : matches.filter(upcomingActive).sort((a, c) => a.start.localeCompare(c.start))[0] || matches[0];
+    if (!b) { toast('No booking found. Check the confirmation number (like WJ-1234) or the email.', 'err'); return; }
     grantGuest(b.id); go('/appointment/' + b.id);
   },
   cancel: (f, d) => {
     const b = bkById(f.dataset.id); if (!b) return;
     const r = cancelBooking(b, d.reason);
     closeModal();
-    toast(r.late && r.fee ? `Cancelled. A ${money(r.fee)} late fee may apply.` : 'Appointment cancelled.');
+    toast(r.fee ? `Cancelled. ${money(r.fee)} charged to the card on file (demo).` : r.keepsDeposit ? 'Cancelled. The upfront payment is kept.' : 'Appointment cancelled.');
     render();
   },
   late: (f, d) => {
     const b = bkById(f.dataset.id); if (!b) return;
-    b.lateNotice = { minutes: Number(d.minutes), at: new Date().toISOString() };
+    b.lateNotice = { minutes: Number(d.minutes) || 10, at: new Date().toISOString() };
     hist(b, `Client is running about ${d.minutes} minutes late`); log(`Running ${d.minutes} min late: ${describe(b)}`, b); save();
-    closeModal(); toast('Thanks, we let the salon know.'); render();
+    closeModal(); toast(`Thanks, we let the salon know. Late arrivals are ${money(state.settings.lateFeePerMin)} a minute.`); render();
   },
   'client-note': (f, d) => { const b = bkById(f.dataset.id); if (!b) return; b.notes = (d.notes || '').trim(); hist(b, 'Client updated their note'); log(`Client note updated: ${describe(b)}`, b); save(); toast('Note saved.'); render(); },
-  'client-profile': (f, d) => { const c = currentClient(); if (!c) return; c.name = d.name.trim() || c.name; c.phone = (d.phone || '').trim(); log(`${c.name} updated their contact details`); save(); toast('Details saved.'); render(); },
+  'client-profile': (f, d) => { const c = currentClient(); if (!c) return; c.name = (d.name || '').trim() || c.name; c.phone = (d.phone || '').trim(); log(`${c.name} updated their contact details`); save(); toast('Details saved.'); render(); },
   waitlist: (f, d) => {
-    const email = (d.email || '').trim().toLowerCase();
-    if (!/^\S+@\S+\.\S+$/.test(email) || !d.name.trim()) { toast('Please add your name and email.', 'err'); return; }
-    let c = state.clients.find(x => x.email.toLowerCase() === email);
-    if (!c) { c = { id: uid('c'), name: d.name.trim(), email, phone: (d.phone || '').trim(), notes: '', createdAt: dKey(new Date()) }; state.clients.push(c); }
-    state.waitlist.push({ id: uid('w'), clientId: c.id, serviceId: d.service, stylistId: d.stylist, date: d.date, timePref: d.timePref, status: 'open', createdAt: new Date().toISOString(), note: '' });
+    let email = (d.email || '').trim().toLowerCase();
+    let c = currentClient() || (email ? state.clients.find(x => x.email.toLowerCase() === email) : null);
+    if (!c) { if (!email) email = `guest-${Date.now().toString(36)}@example.com`; c = { id: uid('c'), name: (d.name || '').trim() || 'Guest client', email, phone: (d.phone || '').trim(), notes: '', createdAt: dKey(new Date()) }; state.clients.push(c); }
+    d.service = svcById(d.service) ? d.service : SERVICES[0].id; d.date = d.date || dKey(addDays(today0(), 1));
+    state.waitlist.push({ id: uid('w'), clientId: c.id, serviceId: d.service, stylistId: d.stylist || 'any', date: d.date, timePref: d.timePref || 'Any time', status: 'open', createdAt: new Date().toISOString(), note: '' });
     log(`${c.name} joined the waitlist: ${svcById(d.service).name}, ${fmtDay(parseDT(d.date))}`);
     save(); toast("You're on the waitlist. We'll text you if a spot opens.");
     go(currentClient() ? '/account' : '/');
@@ -1315,11 +1423,15 @@ const FORMS = {
   'staff-new': (f, d) => {
     let cid = d.clientId;
     if (cid === 'new') {
-      if (!d.newName || !d.newName.trim()) { toast('Add the new client’s name.', 'err'); return; }
-      const c = { id: uid('c'), name: d.newName.trim(), email: (d.newEmail || '').trim().toLowerCase(), phone: (d.newPhone || '').trim(), notes: '', createdAt: dKey(new Date()) };
+      const c = { id: uid('c'), name: (d.newName || '').trim() || 'Walk-in client', email: (d.newEmail || '').trim().toLowerCase(), phone: (d.newPhone || '').trim(), notes: '', createdAt: dKey(new Date()) };
       state.clients.push(c); cid = c.id; log(`Added client ${c.name}`);
     }
-    if (!d.time) { toast('Pick an open time.', 'err'); return; }
+    d.date = d.date || dKey(today0());
+    if (!d.time) {
+      const first = slotsFor(d.date, d.service, d.stylist, { staff: true })[0];
+      if (!first) { toast('No openings that day. Try another date or stylist.', 'err'); return; }
+      d.time = first.time; if (d.stylist === 'any') d.stylist = first.stylistId;
+    }
     const r = createBooking({ clientId: cid, serviceId: d.service, stylistId: d.stylist, key: d.date, time: d.time, source: d.source, notes: (d.notes || '').trim(), staff: true, status: 'confirmed' });
     if (r.error) { toast(r.error, 'err'); fillTimes(f); return; }
     const wlId = f.dataset.waitlist;
@@ -1328,14 +1440,14 @@ const FORMS = {
   },
   'staff-edit': (f, d) => {
     const b = bkById(f.dataset.id); if (!b) return;
-    if (!d.time) { toast('Pick an open time.', 'err'); return; }
+    if (!d.time || !d.date) { toast('No open time picked, so nothing changed.'); return; }
     const r = moveBooking(b, { key: d.date, time: d.time, stylistId: d.stylist, serviceId: d.service });
     if (r.error) { toast(r.error, 'err'); return; }
-    toast(r.unchanged ? 'Nothing changed.' : 'Booking updated.'); render();
+    toast(r.unchanged ? 'Nothing changed.' : r.fee ? `Booking updated. ${money(r.fee)} change charge (demo).` : r.keptDeposit ? 'Booking updated. The upfront payment was kept.' : 'Booking updated.'); render();
   },
   'staff-notes': (f, d) => { const b = bkById(f.dataset.id); if (!b) return; b.staffNotes = (d.staffNotes || '').trim(); hist(b, 'Internal note updated'); log(`Internal note updated: ${describe(b)}`, b); save(); toast('Note saved.'); render(); },
-  'client-edit': (f, d) => { const c = clById(f.dataset.id); if (!c) return; Object.assign(c, { name: d.name.trim(), email: d.email.trim().toLowerCase(), phone: (d.phone || '').trim(), notes: (d.notes || '').trim() }); log(`Updated client ${c.name}`); save(); toast('Client saved.'); render(); },
-  'client-new': (f, d) => { const c = { id: uid('c'), name: d.name.trim(), email: d.email.trim().toLowerCase(), phone: (d.phone || '').trim(), notes: (d.notes || '').trim(), createdAt: dKey(new Date()) }; state.clients.push(c); log(`Added client ${c.name}`); save(); closeModal(); toast('Client added.'); go('/staff/client/' + c.id); },
+  'client-edit': (f, d) => { const c = clById(f.dataset.id); if (!c) return; Object.assign(c, { name: (d.name || '').trim() || c.name, email: (d.email || '').trim().toLowerCase() || c.email, phone: (d.phone || '').trim(), notes: (d.notes || '').trim() }); log(`Updated client ${c.name}`); save(); toast('Client saved.'); render(); },
+  'client-new': (f, d) => { const c = { id: uid('c'), name: (d.name || '').trim() || 'New client', email: (d.email || '').trim().toLowerCase(), phone: (d.phone || '').trim(), notes: (d.notes || '').trim(), createdAt: dKey(new Date()) }; state.clients.push(c); log(`Added client ${c.name}`); save(); closeModal(); toast('Client added.'); go('/staff/client/' + c.id); },
   hours: (f, d) => {
     const st = stById(f.dataset.id); if (!st) return;
     const hours = {};
@@ -1369,7 +1481,7 @@ const FORMS = {
   },
   settings: (f, d) => {
     const s = state.settings;
-    ['cancelWindowHours', 'lateFeePct', 'depositMin', 'depositPct', 'graceMinutes'].forEach(k => { const v = Number(d[k]); if (!Number.isNaN(v) && v >= 0) s[k] = v; });
+    ['fee48', 'fee24', 'noShowFee', 'upfrontMinutes', 'lateFeePerMin', 'guaranteeHours'].forEach(k => { const v = Number(d[k]); if (!Number.isNaN(v) && v >= 0) s[k] = v; });
     log('Updated booking settings'); save(); toast('Settings saved.'); render();
   },
 };
@@ -1386,6 +1498,7 @@ function toast(msg, kind = 'ok') {
 
 /* ---------------- router ---------------- */
 let lastPath = null;
+let afterRender = null;
 function route() {
   const h = location.hash.replace(/^#/, '') || '/';
   const [path, query] = h.split('?');
@@ -1404,8 +1517,15 @@ function render() {
       dashboard: () => staffDashboard(), calendar: () => staffCalendar(q), bookings: () => staffBookings(q),
       booking: () => staffBooking(parts[2]), clients: () => staffClients(q), client: () => staffClient(parts[2]),
       availability: () => staffAvailability(), waitlist: () => staffWaitlist(), activity: () => staffActivity(q), settings: () => staffSettings(),
+      openings: () => staffOpenings(q), new: () => staffOpenings(q), ref: () => staffRef(parts[2]),
     };
-    html = staffShell((map[page] || notFound)(), page === 'booking' ? 'bookings' : page === 'client' ? 'clients' : page);
+    const navKey = { booking: 'bookings', ref: 'bookings', client: 'clients', new: 'openings' }[page] || page;
+    html = staffShell((map[page] || notFound)(), navKey);
+    if (page === 'new') {
+      const want = q.get('client') || '';
+      const cl = state.clients.find(c => c.id === want || c.email.toLowerCase() === want.toLowerCase());
+      afterRender = () => newBookingModal({ client: cl ? cl.id : '', service: q.get('service') || '', stylist: q.get('stylist') || '', date: q.get('date') || '', time: q.get('time') || '' });
+    }
     title = 'Front desk';
   } else {
     const page = parts[0] || 'home';
@@ -1423,6 +1543,7 @@ function render() {
   $('#app').innerHTML = html;
   document.body.classList.toggle('is-staff', parts[0] === 'staff');
   document.querySelectorAll('#app form[data-recalc]').forEach(fillTimes);
+  if (afterRender) { const fn = afterRender; afterRender = null; fn(); }
   const samePage = path === lastPath;
   if (!samePage) window.scrollTo(0, 0);
   if (pendingScroll) {
@@ -1457,7 +1578,6 @@ document.addEventListener('change', e => {
     const box = f.querySelector('.new-client');
     const isNew = el.value === 'new';
     box.hidden = !isNew;
-    f.elements.newName.required = isNew;
   }
   if (el.hasAttribute('data-autosubmit')) f.requestSubmit();
   if (el.dataset.nav && el.value) go(el.dataset.nav + qs({ [el.dataset.param]: el.value }));

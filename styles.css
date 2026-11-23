@@ -160,6 +160,9 @@ code { background: #eef0ef; padding: .1em .35em; border-radius: 5px; font-size: 
 .slot { border: 1px solid #b9d3ca; color: var(--jade); border-radius: 8px; padding: 7px 12px; text-decoration: none; font-weight: 600; font-size: .9rem; background: #fff; min-width: 86px; text-align: center; }
 .slot:hover { background: var(--jade-soft); }
 .slot.is-selected { background: var(--jade); color: #fff; }
+button.slot { font: inherit; font-weight: 600; font-size: .88rem; cursor: pointer; min-width: 80px; }
+.staff-main .slot { color: var(--velora-2); border-color: #cfc6e2; }
+.staff-main .slot:hover { background: #ece8f4; }
 .summary { display: grid; gap: 6px; margin-bottom: 14px; }
 .summary-row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed #e8eae9; padding-bottom: 6px; }
 .summary-row span { color: var(--muted); }
