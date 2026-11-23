@@ -122,7 +122,7 @@ const STYLISTS = [
   { id: 'stephanie', name: 'Stephanie', title: 'Jade Stylist', color: '#3f7d74', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 6: H('09:00', '17:00') } },
   { id: 'sam-d', name: 'Sam D', title: 'Willow Stylist', color: '#7b5ea7', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('12:00', '20:00'), 6: H('09:00', '17:00'), 0: H('09:00', '17:00') } },
 ];
-const HOSPITALITY = [{ name: 'Ashleigh', title: 'Guest Hospitality Specialist and Bridal Coordinator' }, { name: 'Anna', title: 'Guest Hospitality' }, { name: 'Sarah', title: 'Guest Hospitality' }];
+const HOSPITALITY = [{ name: 'Ashleigh Watrous', title: 'Guest Hospitality Specialist/Receptionist and Bridal Coordinator' }];
 const priceLabel = s => (s.from ? 'from ' : '') + money(s.price);
 
 const CLIENT_NAMES = ['Maya Thompson', 'Priya Shah', 'Noah Bennett', 'Chloe Nguyen', 'Ethan Wallace', 'Zoe Patel', 'Lucas Moreno',
