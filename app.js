@@ -14,9 +14,9 @@ const RESEED_AFTER_DAYS = 14;
 const STEP = 15;
 
 const ACCOUNTS = [
-  { email: 'frontdesk@willowandjade.example', password: 'demo1234', role: 'staff', name: 'Front Desk' },
-  { email: 'agent@willowandjade.example', password: 'demo1234', role: 'staff', name: 'AI Front Desk Agent' },
-  { email: 'maya@example.com', password: 'demo1234', role: 'client', name: 'Maya Thompson' },
+  { email: 'frontdesk@willowandjade.example', role: 'staff', name: 'Front Desk' },
+  { email: 'agent@willowandjade.example', role: 'staff', name: 'AI Front Desk Agent' },
+  { email: 'maya@example.com', role: 'client', name: 'Maya Thompson' },
 ];
 
 const SALON = {
@@ -914,12 +914,12 @@ function pageLogin(q) {
     <div class="page-head"><h1>Sign in</h1><p class="muted">Clients see their appointments. Staff go to the Velora front desk portal.</p></div>
     <form novalidate class="form card" data-form="login" data-next="${esc(next)}">
       <label class="field"><span>Email</span><input id="login-email" name="email" type="email" autocomplete="username" placeholder="agent@willowandjade.example"></label>
-      <label class="field"><span>Password (optional in this demo)</span><input id="login-password" name="password" type="password" autocomplete="current-password"></label>
+      <label class="field"><span>Password (not needed in this demo)</span><input id="login-password" name="password" type="password" autocomplete="current-password"></label>
       <button type="submit" class="btn btn-primary" id="login-submit">Sign in</button>
     </form>
-    <div class="card demo-accounts"><h2 class="h3">Demo accounts</h2><p class="muted small">This is a demo. The password is optional, and an empty form signs you in as the AI Front Desk Agent.</p>
-      <table class="table"><thead><tr><th>Role</th><th>Email</th><th>Password</th><th></th></tr></thead><tbody>
-      ${ACCOUNTS.map(a => `<tr><td>${a.role === 'staff' ? esc(a.name) : 'Client (Maya)'}</td><td><code>${a.email}</code></td><td><code>${a.password}</code></td><td><button type="button" class="btn btn-ghost btn-small" data-action="fill-login" data-email="${a.email}" data-password="${a.password}">Use</button></td></tr>`).join('')}
+    <div class="card demo-accounts"><h2 class="h3">Demo accounts</h2><p class="muted small">This is a demo. No password is needed, and an empty form signs you in as the AI Front Desk Agent.</p>
+      <table class="table"><thead><tr><th>Role</th><th>Email</th><th></th></tr></thead><tbody>
+      ${ACCOUNTS.map(a => `<tr><td>${a.role === 'staff' ? esc(a.name) : 'Client (Maya)'}</td><td><code>${a.email}</code></td><td><button type="button" class="btn btn-ghost btn-small" data-action="fill-login" data-email="${a.email}" data-password="">Use</button></td></tr>`).join('')}
       </tbody></table></div></div>`;
 }
 

@@ -10,13 +10,11 @@ A fake salon booking system for The Uncommon Business customer service class dem
 
 ## Demo logins
 
-| Role | Email | Password |
-| --- | --- | --- |
-| AI agent (staff) | `agent@willowandjade.example` | `demo1234` |
-| Front desk (staff) | `frontdesk@willowandjade.example` | `demo1234` |
-| Client (Maya Thompson) | `maya@example.com` | `demo1234` |
+- AI agent (staff): `agent@willowandjade.example`
+- Front desk (staff): `frontdesk@willowandjade.example`
+- Client (Maya Thompson): `maya@example.com`
 
-The password is optional, and an empty sign-in form enters as the AI agent. The agent's changes show under its own name in the Activity log.
+No password is needed. An empty sign-in form enters as the AI agent, and the agent's changes show under its own name in the Activity log.
 
 ## What you can do
 
