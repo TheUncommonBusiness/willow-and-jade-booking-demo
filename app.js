@@ -7,7 +7,7 @@
 'use strict';
 
 /* ---------------- constants ---------------- */
-const STORE_KEY = 'velora-wj-demo-v3';
+const STORE_KEY = 'velora-wj-demo-v4';
 const SESSION_KEY = 'velora-wj-session-v1';
 const GUEST_KEY = 'velora-wj-guest-v1';
 const RESEED_AFTER_DAYS = 14;
@@ -69,10 +69,10 @@ const SERVICES = [
   S('velcro-roller-set', CAT.blow, 'Velcro Roller Set Blowout', 60, true, 60, 'Blowout set in Velcro rollers for body.'),
   S('bang-trim', CAT.cut, 'Bang Trim', 15, true, 15, 'Quick fringe tidy between cuts.'),
   S('barber-cut', CAT.cut, 'Barber Cut/Clipper Cut', 40, true, 30, 'Clipper or barber-style cut.'),
-  S('calligraphy-barber', CAT.cut, 'Calligraphy Barber Cut', 60, false, 45, 'Barber cut using the calligraphy cutting tool.'),
-  S('calligraphy-cut-blowout', CAT.cut, 'Calligraphy Cut with Blowout', 100, true, 75, 'Calligraphy cut finished with a blowout.'),
+  S('calligraphy-barber', CAT.cut, 'Calligraphy Barber Cut', 60, false, 45, 'Barber cut using the calligraphy cutting tool. Nikki G or Stephanie only.', ['nikki-g', 'stephanie']),
+  S('calligraphy-cut-blowout', CAT.cut, 'Calligraphy Cut with Blowout', 100, true, 75, 'Precision cut for natural movement and texture, finished with a blowout. Nikki G or Stephanie only.', ['nikki-g', 'stephanie']),
   S('clean-up-undercut', CAT.cut, 'Clean Up or Undercut', 25, true, 15, 'Neckline, sides or undercut tidy.'),
-  S('extended-calligraphy', CAT.cut, 'Extended Calligraphy Cut and Blowout | Thick or Long Hair', 125, true, 90, 'Calligraphy cut and blowout with extra time.'),
+  S('extended-calligraphy', CAT.cut, 'Extended Calligraphy Cut and Blowout | Thick or Long Hair', 125, true, 90, 'Calligraphy cut and blowout with extra time.', ['nikki-g', 'stephanie']),
   S('extended-haircut-blowout', CAT.cut, 'Extended Haircut and Blowout | Thick/Long Hair OR Transformation Cut', 80, true, 90, 'For thick or long hair, or a big change.'),
   S('haircut-blowout', CAT.cut, 'Haircut & Blowout', 70, true, 60, 'Cut, wash and blowout.'),
   S('pixie-cut', CAT.cut, 'Pixie Cut', 80, true, 45, 'Short cut and style.'),
@@ -120,10 +120,44 @@ const STYLISTS = [
   { id: 'nikki-g', name: 'Nikki G', title: 'Sage Stylist', color: '#6d6a3a', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 6: H('09:00', '17:00') } },
   { id: 'sam-h', name: 'Sam H', title: 'Willow Stylist', color: '#9a6b3f', services: 'all', hours: { 2: H('10:00', '18:00'), 3: H('10:00', '18:00'), 5: H('12:00', '20:00'), 0: H('09:00', '17:00') } },
   { id: 'stephanie', name: 'Stephanie', title: 'Jade Stylist', color: '#3f7d74', services: 'all', hours: { 3: H('10:00', '18:00'), 4: H('11:00', '19:00'), 5: H('10:00', '18:00'), 6: H('09:00', '17:00') } },
-  { id: 'sam-d', name: 'Sam D', title: 'Willow Stylist', color: '#7b5ea7', services: 'all', hours: { 2: H('11:00', '19:00'), 4: H('12:00', '20:00'), 6: H('09:00', '17:00'), 0: H('09:00', '17:00') } },
 ];
 const HOSPITALITY = [{ name: 'Ashleigh Watrous', title: 'Guest Hospitality Specialist/Receptionist and Bridal Coordinator' }];
-const priceLabel = s => (s.from ? 'from ' : '') + money(s.price);
+/* Prices come from the Willow & Jade Pricing Rate Card (KB file SLS-V1.0): a starting price per stylist level.
+   Services that aren't on the card show "Ask for a quote". */
+const LEVELS = ['Rising', 'Willow', 'Jade', 'Sage'];
+const L = (r, w, j, sg, plus = true) => ({ levels: { Rising: r, Willow: w, Jade: j, Sage: sg }, plus });
+const F = (n, plus = false) => ({ fixed: n, plus });
+const RATE = {
+  'color-consultation': F(25), 'extensions-consultation': F(25),
+  glaze: L(50, 60, 60, 60), 'root-touch-up': L(70, 80, 80, 90), 't-zone': L(30, 30, 40, 40),
+  'face-frame-highlight': L(190, 220, 235, 255), 'partial-highlight': L(255, 305, 315, 330), 'partial-foils-nape': L(275, 320, 330, 350), 'full-foil-highlight': L(285, 335, 350, 365),
+  'lived-in-face-frame': L(255, 275, 285, 315), 'lived-in-partial': L(315, 365, 385, 420), 'lived-in-partial-nape': L(335, 380, 395, 430), 'lived-in-full': L(340, 395, 415, 445),
+  'basic-blowout': L(45, 50, 55, 60), 'extended-blowout': L(55, 60, 65, 70), 'evening-style': F(100, true), updo: L(null, 95, 110, 125, false),
+  'eye-makeup': F(50, true), 'full-makeup': F(135),
+  'haircut-blowout': L(70, 80, 90, 100), 'shag-haircut': L(70, 90, 100, 110), 'bang-trim': L(15, 20, 20, 20), 'barber-cut': L(35, 35, 40, 40),
+  'youth-barber': L(35, 45, 50, 50), 'youth-haircut': L(35, 45, 50, 50), 'calligraphy-cut-blowout': F(100, true),
+  'curly-maintenance': F(85), 'curly-lesson': F(100), 'curly-lesson-xl': F(130), 'curly-first-time': F(175), 'curly-first-time-xl': F(205),
+  'full-keratin': F(325, true), 'keratin-express': L(185, 200, 225, 225), perm: F(240, true),
+  'scalp-massage-15': L(16, 20, null, null),
+};
+const PRICE_NOTE = '*Additional product may be necessary. All prices are subject to additional fees.';
+const levelOf = st => (st ? st.title.split(' ')[0] : null);
+function priceInfo(s, st) {
+  const r = RATE[s.id];
+  if (!r) return null;
+  if (r.fixed != null) return { n: r.fixed, plus: r.plus };
+  if (st) { const n = r.levels[levelOf(st)]; return n == null ? null : { n, plus: r.plus, level: levelOf(st) }; }
+  const vals = LEVELS.map(l => r.levels[l]).filter(v => v != null);
+  return { n: Math.min(...vals), max: Math.max(...vals), plus: r.plus, range: true };
+}
+const priceLabel = (s, st) => {
+  const p = priceInfo(s, st);
+  if (!p) return st && RATE[s.id] ? `No ${levelOf(st)} price, ask for a quote` : 'Ask for a quote';
+  const f = n => '$' + n + (p.plus ? '+' : '');
+  if (p.range) return p.n === p.max ? f(p.n) : `${f(p.n)} to ${f(p.max)}`;
+  return p.level ? `${p.level} ${f(p.n)}` : f(p.n);
+};
+const priceNum = (s, st) => { const p = priceInfo(s, st); return p ? p.n : 0; };
 
 const CLIENT_NAMES = ['Maya Thompson', 'Priya Shah', 'Noah Bennett', 'Chloe Nguyen', 'Ethan Wallace', 'Zoe Patel', 'Lucas Moreno',
   'Isabel Ortiz', 'Ben Harper', 'Nora Quinn', 'Leo Walsh', 'Ruby Chen', 'Max Ivanov', 'Ella Fischer', 'Sean Ortega', 'Iris Novak',
@@ -636,7 +670,7 @@ function pageHome() {
       <div><dt>Call or text</dt><dd>${esc(SALON.phone)}</dd></div><div><dt>Find us</dt><dd>${esc(SALON.address)}</dd></div></dl>
   </section>
   <section class="section"><div class="section-head"><h2>Services and prices</h2><a class="link" href="#/policies">Booking policies</a></div>
-    <p class="muted small">Online prices are starting prices. Your final price depends on your stylist's tier (Rising, Willow, Jade or Sage) and, for color, how much color is used.</p>
+    <p class="muted small">Prices are starting prices by stylist level: Rising, Willow, Jade and Sage. Your stylist sets the final price on the day. ${PRICE_NOTE}</p>
     <div class="svc-acc">${svcHtml}</div></section>
   <section class="section"><h2>Our team</h2><ul class="team">${team}</ul></section>`;
 }
@@ -675,7 +709,7 @@ function pageBook(q) {
   } else if (svc) {
     const elig = state.stylists.filter(st => canDo(st, svc.id));
     h += `<div class="options options-tight"><a class="option" href="${base}${qs({ service: p.service, stylist: 'any' })}"><span class="opt-main"><span class="opt-name">Any available stylist</span><span class="opt-desc">See the most open times</span></span></a>
-      ${elig.map(st => `<a class="option" href="${base}${qs({ service: p.service, stylist: st.id })}"><span class="avatar avatar-sm" style="--c:${st.color}">${initials(st.name)}</span><span class="opt-main"><span class="opt-name">${esc(st.name)}</span><span class="opt-desc">${esc(st.title)} · works ${workDays(st)}</span></span></a>`).join('')}</div>`;
+      ${elig.map(st => `<a class="option" href="${base}${qs({ service: p.service, stylist: st.id })}"><span class="avatar avatar-sm" style="--c:${st.color}">${initials(st.name)}</span><span class="opt-main"><span class="opt-name">${esc(st.name)}</span><span class="opt-desc">${esc(st.title)} · ${priceLabel(svc, st)} · works ${workDays(st)}</span></span></a>`).join('')}</div>`;
   }
   h += '</li>';
 
@@ -713,7 +747,7 @@ function pageBook(q) {
         <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}${p.stylist === 'any' ? ' <span class="muted">(first available)</span>' : ''}</b></div>
         <div class="summary-row"><span>When</span><b>${fmtLong(parseDT(p.date))} at ${fmtT(p.time)}</b></div>
         <div class="summary-row"><span>Length</span><b>${durLabel(svc.dur)}</b></div>
-        <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
+        <div class="summary-row"><span>Price</span><b>${priceLabel(svc, st)}</b></div>
         ${dep ? `<div class="summary-row"><span>Upfront payment</span><b>Needed to hold your chair (3+ hour appointment). Applies to your final balance. Nonrefundable. <span class="muted">Demo: nothing is charged.</span></b></div>` : ''}</div>
       ${c ? '' : `<p class="muted small">Been here before? <a class="link" href="#/login${qs({ next: location.hash.slice(1) })}">Sign in</a> to fill this in for you.</p>`}
       <form novalidate class="form" data-form="book-confirm" novalidate>
@@ -747,7 +781,7 @@ function pageConfirmed(id) {
     <div class="summary"><div class="summary-row"><span>Service</span><b>${esc(svc.name)}</b></div>
       <div class="summary-row"><span>Stylist</span><b>${esc(st.name)}</b></div>
       <div class="summary-row"><span>When</span><b>${fmtWhen(b.start)}</b></div>
-      <div class="summary-row"><span>Price</span><b>${priceLabel(svc)}</b></div>
+      <div class="summary-row"><span>Price</span><b>${priceLabel(svc, st)}</b></div>
       ${b.deposit ? `<div class="summary-row"><span>Upfront payment</span><b>Held on card (demo)</b></div>` : ''}</div>
     <p class="muted">We'd text a reminder the day before. Need to change it? Use your confirmation number and email on the Change or cancel page.</p>
     <div class="btn-row"><a class="btn btn-primary" href="#/appointment/${b.id}">Manage this booking</a>
@@ -795,7 +829,7 @@ function pageAppointment(id) {
         <div><dt>When</dt><dd>${fmtWhen(b.start)}</dd></div>
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>Length</dt><dd>${durLabel(svc.dur)}</dd></div>
-        <div><dt>Price</dt><dd>${priceLabel(svc)}</dd></div>
+        <div><dt>Price</dt><dd>${priceLabel(svc, st)}</dd></div>
         <div><dt>Upfront payment</dt><dd>${depositText(b)}</dd></div>
         <div><dt>Booked for</dt><dd>${esc(c ? c.name : '')}</dd></div>
       </dl>
@@ -954,7 +988,7 @@ function staffDashboard() {
   const wl = state.waitlist.filter(w => w.status === 'open');
   const weekStart = addDays(today0(), -6);
   const cancels = state.bookings.filter(b => b.status === 'cancelled' && new Date(b.updatedAt) >= weekStart).length;
-  const revenue = todays.filter(b => b.status !== 'no-show').reduce((s, b) => s + svcById(b.serviceId).price, 0);
+  const revenue = todays.filter(b => b.status !== 'no-show').reduce((s, b) => s + priceNum(svcById(b.serviceId), stById(b.stylistId)), 0);
   const row = b => {
     const svc = svcById(b.serviceId), st = stById(b.stylistId), c = clById(b.clientId);
     let act = '';
@@ -971,7 +1005,7 @@ function staffDashboard() {
   return `<div class="page-head row"><div><h1>Today</h1><p class="muted">${fmtLong(today0())}</p></div><a class="btn btn-secondary" href="#/staff/calendar">Open calendar</a></div>
     <div class="stats">
       <div class="stat"><span class="stat-n">${todays.length}</span><span class="stat-l">Appointments today</span></div>
-      <div class="stat"><span class="stat-n">$${revenue.toLocaleString('en-US')}</span><span class="stat-l">Booked revenue today</span></div>
+      <div class="stat"><span class="stat-n">$${revenue.toLocaleString('en-US')}</span><span class="stat-l">Booked today (starting prices)</span></div>
       <div class="stat"><span class="stat-n">${unconfirmed.length}</span><span class="stat-l">Unconfirmed, next 48 hrs</span></div>
       <div class="stat"><span class="stat-n">${cancels}</span><span class="stat-l">Cancellations, last 7 days</span></div>
     </div>
@@ -1033,7 +1067,7 @@ function staffOpenings(q) {
     const cell = slots.length
       ? `<div class="slots">${slots.map(x => `<button type="button" class="slot" data-action="new-booking" data-service="${svc.id}" data-stylist="${st.id}" data-date="${date}" data-time="${x.time}" aria-label="Book ${esc(svc.name)} with ${esc(st.name)} at ${fmtT(x.time)}">${fmtT(x.time)}</button>`).join('')}</div>`
       : `<span class="muted">${!canDo(st, svc.id) ? 'Doesn’t offer this service' : windowFor(st, date) ? 'Fully booked' : 'Not working'}</span>`;
-    return `<tr><td class="nowrap">${stDot(st)} ${esc(st.name)}<div class="muted small">${esc(st.title)}</div></td><td>${cell}</td></tr>`;
+    return `<tr><td class="nowrap">${stDot(st)} ${esc(st.name)}<div class="muted small">${esc(st.title)} · ${priceLabel(svc, st)}</div></td><td>${cell}</td></tr>`;
   }).join('');
   const week = [];
   for (let i = 0; i < 7; i++) {
@@ -1130,7 +1164,7 @@ function staffBooking(id) {
     <div class="grid-2">
       <section class="card"><h2 class="h3">Details</h2><dl class="details">
         <div><dt>Client</dt><dd><a class="link" href="#/staff/client/${c.id}">${esc(c.name)}</a><br><span class="muted small">${esc(c.email)} · ${esc(c.phone)}</span></dd></div>
-        <div><dt>Service</dt><dd>${esc(svc.name)} · ${durLabel(svc.dur)} · ${priceLabel(svc)}</dd></div>
+        <div><dt>Service</dt><dd>${esc(svc.name)} · ${durLabel(svc.dur)} · ${priceLabel(svc, st)}</dd></div>
         <div><dt>Stylist</dt><dd>${stDot(st)} ${esc(st.name)}</dd></div>
         <div><dt>When</dt><dd>${fmtWhen(b.start)} to ${fmtTime(parseDT(b.end))}</dd></div>
         <div><dt>Booked via</dt><dd>${esc(b.source)} · ${fmtStamp(b.createdAt)}</dd></div>
@@ -1169,10 +1203,10 @@ function staffClient(id) {
   const mine = state.bookings.filter(b => b.clientId === c.id);
   const up = mine.filter(b => parseDT(b.end) >= now && b.status !== 'cancelled').sort((a, b) => a.start.localeCompare(b.start));
   const past = mine.filter(b => !up.includes(b)).sort((a, b) => b.start.localeCompare(a.start));
-  const spent = mine.filter(b => b.status === 'completed').reduce((s, b) => s + svcById(b.serviceId).price, 0);
+  const spent = mine.filter(b => b.status === 'completed').reduce((s, b) => s + priceNum(svcById(b.serviceId), stById(b.stylistId)), 0);
   const tbl = list => list.length ? `<table class="table"><thead><tr><th>Ref</th><th>When</th><th>Service</th><th>Stylist</th><th>Status</th></tr></thead><tbody>${list.map(b => `<tr><td><a class="link" href="#/staff/booking/${b.id}">${b.ref}</a></td><td class="nowrap">${fmtShortWhen(b.start)}</td><td>${esc(svcById(b.serviceId).name)}</td><td>${esc(stById(b.stylistId).name)}</td><td>${pill(b.status)}</td></tr>`).join('')}</tbody></table>` : emptyState('None.');
   return `<p><a class="link" href="#/staff/clients">← All clients</a></p>
-    <div class="page-head row"><div><h1>${esc(c.name)}</h1><p class="muted">Client since ${fmtDay(parseDT(c.createdAt))} · ${mine.filter(b => b.status === 'completed').length} visits · ${money(spent)} spent</p></div>
+    <div class="page-head row"><div><h1>${esc(c.name)}</h1><p class="muted">Client since ${fmtDay(parseDT(c.createdAt))} · ${mine.filter(b => b.status === 'completed').length} visits · $${spent.toLocaleString('en-US')} spent (starting prices)</p></div>
       <button type="button" class="btn btn-primary" data-action="new-booking" data-client="${c.id}">+ Book for ${esc(firstName(c.name))}</button></div>
     <div class="grid-2 wide-left">
       <section class="card"><h2 class="h3">Upcoming</h2>${tbl(up)}<h2 class="h3">Past and cancelled</h2>${tbl(past)}</section>

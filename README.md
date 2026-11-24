@@ -4,7 +4,7 @@ A fake salon booking system for The Uncommon Business customer service class dem
 
 **This is a class demo.** No real appointments, payments or personal data. Every page carries a demo banner, and search engines are told not to list it.
 
-**What matches the real salon:** the service menu (all 65 services, names, categories and starting prices) and the staff names and tiers, from Willow & Jade's public online booking page on 2026-11-23. The policies and hours match the Willow & Jade knowledge base files. **What's made up:** service lengths, stylist schedules, clients, address and phone. Velora replaces their real booking software in this demo and copies none of its branding.
+**What matches the real salon:** the service menu (names and categories) and the stylists and tiers, from Willow & Jade's public online booking page on 2026-11-23. Prices, policies, hours and the front desk (Ashleigh Watrous) match the Willow & Jade knowledge base files, with prices by stylist level from the Pricing Rate Card. Services not on the Rate Card show "Ask for a quote." **What's made up:** service lengths, stylist schedules, clients, address and phone. Velora replaces their real booking software in this demo and copies none of its branding.
 
 **For AI agents:** read [AGENT-GUIDE.md](AGENT-GUIDE.md). It has every link, a playbook for each common client email, the guardrails, and the service and stylist IDs.
 
@@ -19,7 +19,7 @@ No password is needed. An empty sign-in form enters as the AI agent, and the age
 ## What you can do
 
 **As a client (public booking site)**
-- Browse services, starting prices and the team
+- Browse services, Rate Card prices by stylist level, and the team
 - Book: pick a service, a stylist (or any available), a date and an open time
 - Look up a booking with its confirmation number (email optional)
 - Reschedule, cancel, confirm, or say you're running late, with the fee warning shown first
